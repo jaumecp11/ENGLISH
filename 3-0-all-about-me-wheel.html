@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All About Me Wheel</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--c1:#6c4cf5;--c2:#ff5c8a;--acc:#ffcf3f;--ink:#26214a;--card:#fff;--soft:#f2efff;--good:#22b35b;--bad:#e5484d;--r:20px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--c1)}
+body{font-family:'Fredoka',system-ui,sans-serif;color:var(--ink);min-height:100vh;padding:12px 16px 30px;overflow-x:hidden;background:radial-gradient(circle at 12% 18%,rgba(255,255,255,.16) 0 70px,transparent 71px),radial-gradient(circle at 88% 78%,rgba(255,255,255,.12) 0 110px,transparent 111px),radial-gradient(circle at 70% 8%,rgba(255,255,255,.1) 0 40px,transparent 41px),linear-gradient(135deg,var(--c1),var(--c2)) fixed}
+button{font-family:'Fredoka',sans-serif}
+.wrap{max-width:1080px;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.top h1{color:#fff;font-size:clamp(24px,4.6vw,42px);line-height:1;text-shadow:0 3px 0 rgba(0,0,0,.18)}
+.top h1 small{display:block;font-size:.4em;font-weight:600;opacity:.95;margin-top:5px}
+.tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tb{border:0;color:#fff;font-weight:700;background:rgba(0,0,0,.2);padding:7px 13px;border-radius:999px;font-size:15px;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;transition:.15s}
+.tb:hover{background:rgba(0,0,0,.32)}
+.tb.learn{background:#fff;color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.tb.off{opacity:.55}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--card);border-radius:999px;padding:5px 14px;font-weight:700;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.hud{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.panel{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:0 6px 0 rgba(0,0,0,.15)}
+.btn{font:700 19px 'Fredoka',sans-serif;border:0;border-radius:14px;padding:11px 22px;cursor:pointer;background:var(--acc);color:#3a2a00;box-shadow:0 5px 0 rgba(0,0,0,.25);transition:transform .1s}
+.btn:hover{transform:translateY(-2px)}
+.btn.sec{background:var(--soft);color:var(--ink)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.opt{font:600 clamp(16px,2.4vw,20px) 'Fredoka',sans-serif;border:0;border-radius:14px;padding:11px 14px;cursor:pointer;background:var(--soft);color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.12);text-align:center;transition:transform .1s,background .15s}
+.opt:hover:not(:disabled){transform:translateY(-2px);background:#e7e1ff}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--good)!important;color:#fff!important;animation:okp .4s}
+.opt.no{background:var(--bad)!important;color:#fff!important;animation:shake .4s}
+@keyframes okp{50%{transform:scale(1.05)}}
+.blank{display:inline-block;min-width:70px;border-bottom:3px dashed #aaa;color:transparent}
+.pic{display:block;width:100%;height:100%;object-fit:cover}
+.emo{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(34px,6vw,70px);background:var(--soft)}
+.modal{position:fixed;inset:0;background:rgba(20,15,45,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:40;backdrop-filter:blur(2px)}
+.modal.show{display:flex}
+.mbox{background:var(--card);border-radius:26px;max-width:540px;width:100%;padding:22px;text-align:center;box-shadow:0 10px 0 rgba(0,0,0,.2);animation:pop .4s cubic-bezier(.3,1.6,.5,1);max-height:94vh;overflow:auto}
+.mbox h2{font-size:clamp(24px,4vw,34px);margin:6px 0}
+.mbox .big{font-size:64px;line-height:1}
+.mbox p{font-size:18px;margin:6px 0}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.shake{animation:shake .4s}
+.toast{position:fixed;left:50%;top:14px;transform:translate(-50%,-90px);background:var(--card);padding:10px 22px;border-radius:16px;font-weight:700;font-size:clamp(18px,3vw,26px);box-shadow:0 8px 0 rgba(0,0,0,.2);transition:.35s;z-index:80;max-width:92vw;text-align:center}
+.toast.show{transform:translate(-50%,0)}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:90}
+.mascot{position:fixed;left:14px;bottom:14px;z-index:85;display:flex;align-items:flex-end;gap:6px;pointer-events:none;transform:translateY(140%);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.mascot.show{transform:none}
+.mascot .mf{font-size:clamp(46px,6vw,64px);line-height:1;filter:drop-shadow(0 4px 0 rgba(0,0,0,.2))}
+.mascot .mb{background:#fff;border-radius:18px 18px 18px 4px;padding:8px 14px;font-weight:700;font-size:clamp(16px,2.2vw,20px);box-shadow:0 5px 0 rgba(0,0,0,.18);margin-bottom:34px;white-space:nowrap}
+.mascot.good .mb{color:#15803d}.mascot.bad .mb{color:#b91c1c}
+/* ---------- intro & theory ---------- */
+.ov{position:fixed;inset:0;z-index:70;display:none;overflow:auto;padding:18px 14px 30px;background:linear-gradient(135deg,var(--c1),var(--c2))}
+.ov.show{display:block}
+.introbox{max-width:620px;margin:4vh auto 0;background:#fff;border-radius:30px;padding:26px 22px;text-align:center;box-shadow:0 12px 0 rgba(0,0,0,.2);animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+.introbox .ie{font-size:76px;line-height:1;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-4deg)}}
+.introbox h2{font-size:clamp(28px,5vw,40px);margin:8px 0 2px}
+.introbox .is{color:#6b6790;font-weight:600;font-size:17px}
+.how{text-align:left;margin:18px 0;display:grid;gap:10px}
+.how div{display:flex;gap:12px;align-items:center;background:var(--soft);border-radius:16px;padding:10px 14px;font-size:18px;font-weight:600}
+.how div b{font-size:28px;flex-shrink:0;width:36px;text-align:center}
+.how div small{display:block;font-weight:500;color:#6b6790;font-size:14px}
+.ibtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.ibtns .btn{font-size:21px;padding:14px 26px}
+.ibtns .btn.learnb{background:#fff;color:var(--ink);border:3px solid var(--c1);box-shadow:0 5px 0 var(--c1)}
+.th{max-width:980px;margin:0 auto}
+.thhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#fff;margin-bottom:14px}
+.thhead h2{font-size:clamp(26px,4.6vw,40px);text-shadow:0 3px 0 rgba(0,0,0,.2);line-height:1.05}
+.thhead h2 small{display:block;font-size:.45em;opacity:.95;font-weight:600}
+.ttabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.ttabs button{border:0;border-radius:999px;padding:9px 18px;font-weight:700;font-size:17px;cursor:pointer;background:rgba(255,255,255,.3);color:#fff}
+.ttabs button.on{background:#fff;color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.tsec{display:none}.tsec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.vc{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,.15);cursor:pointer;border:0;padding:0;text-align:center;transition:transform .15s}
+.vc:hover{transform:translateY(-4px) rotate(-1deg)}
+.vc .vi{aspect-ratio:1/0.85;overflow:hidden}
+.vc .vi .emo{font-size:58px}
+.vc .vw{font-weight:700;font-size:19px;padding:7px 6px 2px;color:var(--ink)}
+.vc .vca{font-size:14px;color:#8a86a8;padding-bottom:8px;min-height:22px}
+.vc.play{outline:4px solid var(--acc)}
+.gcards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));align-items:start}
+.gc{background:#fff;border-radius:22px;padding:18px;box-shadow:0 6px 0 rgba(0,0,0,.15)}
+.gc h3{font-size:clamp(20px,3vw,25px);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.gc .ca{background:#fff7d6;border-left:6px solid var(--acc);border-radius:12px;padding:10px 12px;font-size:16px;margin:8px 0 12px;line-height:1.4}
+.gc .ca b{color:#9a6b00}
+.exs{display:grid;gap:8px}
+.ex{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:14px;padding:9px 12px;font-size:clamp(17px,2.4vw,21px);font-weight:600;cursor:pointer;border:0;text-align:left;color:var(--ink);width:100%}
+.ex:hover{background:#e7e1ff}
+.ex .spk{font-size:20px;flex-shrink:0}
+.ex mark{background:var(--acc);border-radius:6px;padding:0 4px;color:#3a2a00}
+.ex .tr{display:block;font-size:14px;color:#8a86a8;font-weight:500}
+.gtable{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:clamp(16px,2.3vw,20px);margin-top:4px}
+.gtable td,.gtable th{padding:8px 10px;text-align:left}
+.gtable th{font-size:14px;color:#6b6790;text-transform:uppercase;letter-spacing:.5px}
+.gtable td{background:var(--soft);font-weight:600}
+.gtable tr td:first-child{border-radius:12px 0 0 12px}.gtable tr td:last-child{border-radius:0 12px 12px 0}
+.gtable mark{background:var(--acc);border-radius:6px;padding:0 4px}
+.thfoot{text-align:center;margin-top:20px}
+.qc{background:#fff;border-radius:22px;padding:18px;box-shadow:0 6px 0 rgba(0,0,0,.15);max-width:620px;margin:0 auto;text-align:center}
+.qc h3{font-size:clamp(20px,3vw,26px);margin:8px 0 12px}
+.qc .opts{display:grid;gap:8px}
+.qcp{display:flex;gap:6px;justify-content:center;margin-bottom:6px}.qcp i{width:14px;height:14px;border-radius:50%;background:#e4e0f5}.qcp i.ok{background:var(--good)}.qcp i.no{background:var(--bad)}
+@media (max-width:600px){.vgrid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}.vc .vw{font-size:16px}.how div{font-size:16px}.tools .tb span{display:none}}
+.game{display:grid;grid-template-columns:minmax(260px,1fr) minmax(280px,1fr);gap:20px;align-items:center}
+.wbox{position:relative;width:min(88vw,460px);aspect-ratio:1;margin:0 auto}
+.wbox canvas{width:100%;height:100%;filter:drop-shadow(0 10px 0 rgba(0,0,0,.2))}
+.pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:22px solid transparent;border-right:22px solid transparent;border-top:44px solid #fff;filter:drop-shadow(0 4px 0 rgba(0,0,0,.3));z-index:2}
+.hub{position:absolute;inset:38%;border-radius:50%;background:#fff;border:0;cursor:pointer;font:700 clamp(16px,2.6vw,24px) 'Fredoka',sans-serif;color:var(--ink);box-shadow:0 6px 0 rgba(0,0,0,.25);z-index:2}
+.hub:active{transform:translateY(4px)}
+.teams{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.tm{flex:1;background:#fff;border-radius:14px;padding:8px 12px;font-weight:700;display:flex;justify-content:space-between;border:4px solid transparent;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.tm.cur{border-color:var(--ink)}
+.panel h2{font-size:clamp(21px,3vw,28px);line-height:1.2;margin:8px 0}
+.panel h2 .blank{display:inline-block;min-width:70px;border-bottom:3px dashed #aaa;color:transparent}
+.tag{display:inline-block;border-radius:999px;padding:4px 14px;font-weight:700;color:#fff}
+.opts{display:grid;gap:8px;margin-top:10px}
+.res{margin-top:10px;font-weight:700;font-size:18px;min-height:24px}
+@media (max-width:760px){.game{grid-template-columns:1fr}}
+/*FILL*/
+.game{grid-template-columns:auto 1fr;gap:30px;min-height:var(--avh)}
+.wbox{width:min(50vw,var(--avh),760px)}
+.hub{font-size:clamp(20px,2.6vw,34px)}
+.pointer{border-left-width:28px;border-right-width:28px;border-top-width:56px}
+.tm{font-size:22px;padding:12px 16px}
+.panel h2{font-size:clamp(26px,3vw,40px)}
+.panel p{font-size:20px}
+.tag{font-size:18px;padding:6px 16px}
+.opts{gap:12px}
+.res{font-size:22px}
+@media (max-width:760px){.game{grid-template-columns:1fr;min-height:0}.wbox{width:min(88vw,460px)}}
+
+/* ===== BIG UI ===== */
+.wrap{max-width:1500px}
+body{padding:10px 18px 18px}
+.top{margin-bottom:10px}
+.top h1{font-size:clamp(28px,3.6vw,46px)}
+.top h1 small{font-size:.42em}
+.tb{font-size:17px;padding:10px 16px}
+.pill{font-size:clamp(17px,1.6vw,21px);padding:8px 18px}
+.hud{gap:10px;margin-bottom:12px}
+.btn{font-size:clamp(19px,1.8vw,24px);padding:14px 28px;border-radius:16px}
+.opt{font-size:clamp(19px,2vw,28px);padding:16px 18px;border-radius:16px;min-height:62px}
+.seg{display:flex;background:rgba(255,255,255,.92);border-radius:999px;padding:5px;box-shadow:0 4px 0 rgba(0,0,0,.15);gap:2px}
+.seg button{font:700 clamp(15px,1.4vw,19px) 'Fredoka',sans-serif;border:0;background:transparent;padding:10px 18px;border-radius:999px;cursor:pointer;color:var(--ink);transition:.15s}
+.seg button:hover{background:var(--soft)}
+.seg button.on{background:var(--c1);color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.mbox{max-width:780px;padding:28px}
+.mbox h2{font-size:clamp(26px,3.2vw,40px);line-height:1.2}
+.mbox .opts{gap:12px!important}
+.mbox .opt{font-size:clamp(20px,2.2vw,30px)}
+.mbox .im{max-width:420px!important}
+.mbox p{font-size:20px}
+.panel{padding:20px;border-radius:24px}
+:root{--avh:calc(100vh - 165px)}
+@media (max-width:760px){:root{--avh:auto}.opt{min-height:52px}.btn{padding:12px 20px}}
+</style></head><body>
+<canvas id="fx"></canvas>
+<div class="wrap">
+ <div class="top"><h1>🎡 All About Me Wheel<small>3r · Starter</small></h1>
+  <div class="tools"><button class="tb learn" id="tLearn">📖 <span>Learn</span></button><button class="tb" id="tHow">❔ <span>How to play</span></button><button class="tb" id="tSnd" title="Sound">🔊</button><button class="tb" id="tVoice" title="Voice">🗣️</button><button class="tb" id="tFs" title="Full screen">⛶</button><a class="tb" href="index.html">🏠 <span>Menu</span></a></div></div>
+ <div class="hud"><span class="pill">🎡 <b id="rn">0/10</b></span><div class="seg" id="mode"><button data-v="1" class="on">🧒 1 player</button><button data-v="2">👥 2 teams</button></div></div>
+<div class="game">
+ <div class="wbox"><div class="pointer"></div><canvas id="wh" width="600" height="600"></canvas><button class="hub" id="spin">SPIN!</button></div>
+ <div><div class="teams" id="teams"></div><div class="panel" id="panel"></div></div>
+</div>
+</div>
+<div class="ov" id="intro"><div class="introbox" id="introbox"></div></div>
+<div class="ov" id="theory"><div class="th" id="th"></div></div>
+<div class="toast" id="toast"></div>
+<div class="mascot" id="mascot"><div class="mf" id="mf">🦉</div><div class="mb" id="mb"></div></div>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<script>
+const D={"theme": {"c1": "#f59e0b", "c2": "#ef4444"}, "wheel": {"title": "All About Me", "segs": [{"n": "Adjectives", "ic": "😄", "c": "#ff5c8a", "items": [{"q": "🦁 A lion is ___.", "a": "dangerous", "w": ["friendly", "quiet"]}, {"q": "🐶 My dog is very nice to people. He’s ___.", "a": "friendly", "w": ["dangerous", "sporty"]}, {"q": "🤡 My brother tells jokes. He’s ___.", "a": "funny", "w": ["quiet", "furry"]}, {"q": "🐹 My guinea pig has got lots of hair. It’s ___.", "a": "furry", "w": ["sporty", "funny"]}, {"q": "🦉 The owl is very clever. It’s ___.", "a": "intelligent", "w": ["lively", "furry"]}, {"q": "🐒 The monkey jumps and plays all day. It’s ___.", "a": "lively", "w": ["quiet", "intelligent"]}, {"q": "🐢 The tortoise doesn’t make noise. It’s ___.", "a": "quiet", "w": ["lively", "dangerous"]}, {"q": "⚽ My sister plays football and tennis. She’s ___.", "a": "sporty", "w": ["furry", "quiet"]}]}, {"n": "Is he…?", "ic": "❓", "c": "#38bdf8", "items": [{"q": "🐯 Is the tiger dangerous? ✅", "a": "Yes, it is.", "w": ["No, it isn’t.", "Yes, it does."]}, {"q": "🐰 Is the rabbit dangerous? ❌", "a": "No, it isn’t.", "w": ["Yes, it is.", "No, it doesn’t."]}, {"q": "👦😂 Is he funny? ✅", "a": "Yes, he is.", "w": ["Yes, she is.", "No, he isn’t."]}, {"q": "👧🤫 Is she lively? ❌", "a": "No, she isn’t.", "w": ["No, he isn’t.", "Yes, she is."]}, {"q": "Tom is funny. ___ isn’t quiet.", "a": "He", "w": ["She", "It"]}, {"q": "Becky is sporty. ___ is lively.", "a": "She", "w": ["He", "They"]}]}, {"n": "My things", "ic": "🎒", "c": "#22b35b", "items": [{"q": "📛📛 What are they?", "a": "badges", "w": ["a sketch book", "a football kit"]}, {"q": "🐹 What is it?", "a": "a guinea pig", "w": ["a football kit", "badges"]}, {"q": "🎨📓 What is it?", "a": "a sketch book", "w": ["a guinea pig", "badges"]}, {"q": "👕⚽🧦 What is it?", "a": "a football kit", "w": ["a sketch book", "a guinea pig"]}, {"q": "What are your favourite ___? My guinea pig and my badges!", "a": "things", "w": ["thing", "pets"]}]}, {"n": "Questions", "ic": "💬", "c": "#a78bfa", "items": [{"q": "“What’s your name?”", "a": "My name’s Sam.", "w": ["I’m nine.", "I live in London."]}, {"q": "“How old are you?”", "a": "I’m nine.", "w": ["My name’s Sam.", "I’m 130 cm tall."]}, {"q": "“Where do you live?”", "a": "I live in Badalona.", "w": ["I’m eight.", "Yes, I have."]}, {"q": "“How tall are you?”", "a": "I’m 135 cm tall.", "w": ["I’m nine.", "I live in Ripollet."]}, {"q": "“Have you got a pet?”", "a": "Yes, I have. A dog!", "w": ["Yes, I am.", "I’m a dog."]}, {"q": "“Have you got any brothers or sisters?”", "a": "Yes, I’ve got a sister.", "w": ["Yes, I am a sister.", "I’m a brother."]}]}, {"n": "Numbers", "ic": "🔢", "c": "#ffb020", "items": [{"q": "🔢 25", "a": "twenty-five", "w": ["fifty-two", "twenty-two"]}, {"q": "🔢 40", "a": "forty", "w": ["fourteen", "fourty"]}, {"q": "🔢 63", "a": "sixty-three", "w": ["thirty-six", "sixteen-three"]}, {"q": "🔢 100", "a": "a hundred", "w": ["ten", "ten hundred"]}, {"q": "🔢 78", "a": "seventy-eight", "w": ["eighty-seven", "seventeen-eight"]}, {"q": "🔢 91", "a": "ninety-one", "w": ["nineteen-one", "nineteen"]}, {"q": "🔢 Which number is “fifty-four”?", "a": "54", "w": ["45", "514"]}, {"q": "🔢 Which number is “thirty”?", "a": "30", "w": ["13", "33"]}]}, {"n": "Spell it!", "ic": "🔤", "c": "#ef4444", "items": [{"q": "🔤 F-U-N-N-Y", "a": "funny", "w": ["furry", "sunny"]}, {"q": "🔤 Q-U-I-E-T", "a": "quiet", "w": ["quite", "quit"]}, {"q": "🔤 S-P-O-R-T-Y", "a": "sporty", "w": ["spotty", "sport"]}, {"q": "🔤 F-U-R-R-Y", "a": "furry", "w": ["funny", "fury"]}, {"q": "🔤 Which is correct?", "a": "friendly", "w": ["frendly", "friendley"]}, {"q": "🔤 Which is correct?", "a": "intelligent", "w": ["inteligent", "intelligant"]}]}]}, "theory": {"title": "3r · Starter · All about me", "vocab": [{"img": "🦈", "w": "dangerous", "ca": "perillós"}, {"img": "🐶", "w": "friendly", "ca": "simpàtic, amable"}, {"img": "🤡", "w": "funny", "ca": "divertit"}, {"img": "🐹", "w": "furry", "ca": "pelut"}, {"img": "🦉", "w": "intelligent", "ca": "intel·ligent"}, {"img": "🐒", "w": "lively", "ca": "animat, moguda"}, {"img": "🐢", "w": "quiet", "ca": "tranquil, silenciós"}, {"img": "⚽", "w": "sporty", "ca": "esportista"}, {"img": "📛", "w": "badges", "ca": "xapes"}, {"img": "👕", "w": "football kit", "ca": "equipació de futbol"}, {"img": "🐹", "w": "guinea pig", "ca": "conillet d’índies"}, {"img": "📓", "w": "sketch book", "ca": "llibreta de dibuix"}], "grammar": [{"ic": "😄", "t": "He’s / She’s + adjective", "ca": "Per descriure algú: <b>He’s</b> (ell és) / <b>She’s</b> (ella és). Per dir que NO: <b>isn’t</b>.", "ex": [["{He’s} funny.", "Ell és divertit."], ["{She’s} sporty.", "Ella és esportista."], ["My dog {isn’t} dangerous.", "El meu gos no és perillós."]]}, {"ic": "❓", "t": "Is he…? Is she…?", "ca": "Per preguntar, posem <b>Is</b> al davant. Responem curt: <b>Yes, he is.</b> / <b>No, she isn’t.</b>", "ex": [["{Is} he friendly? — {Yes, he is.}", ""], ["{Is} she quiet? — {No, she isn’t.}", ""]]}, {"ic": "💬", "t": "Questions about me", "ca": "Preguntes per presentar-te.", "ex": [["What’s your name? — My name’s {Sam}.", "Com et dius?"], ["How old are you? — I’m {nine}.", "Quants anys tens?"], ["Where do you live? — I live in {Badalona}.", "On vius?"], ["How tall are you? — I’m {135 cm} tall.", "Quant fas d’alçada?"], ["Have you got a pet? — Yes, I {have}.", "Tens mascota?"]]}, {"ic": "🔢", "t": "Numbers 20–100", "ca": "Les desenes acaben en <b>-ty</b>. Per fer 25: <b>twenty</b> + guió + <b>five</b>.", "table": [["20", "twenty"], ["30", "thirty"], ["40", "{forty} (sense u!)"], ["50", "fifty"], ["60", "sixty"], ["70", "seventy"], ["80", "eighty"], ["90", "ninety"], ["100", "a hundred"], ["25", "twenty{-}five"]]}], "check": [{"q": "🦁 A lion is ___.", "a": "dangerous", "w": ["friendly", "furry"]}, {"q": "Is she sporty? ✅", "a": "Yes, she is.", "w": ["Yes, he is.", "Yes, she isn’t."]}, {"q": "🔢 40", "a": "forty", "w": ["fourty", "fourteen"]}, {"q": "“How old are you?”", "a": "I’m nine.", "w": ["I live in Ripollet.", "My name’s Tom."]}]}};const IMG=[];const HOW=[["🎡", "Press SPIN!", "Fes girar la ruleta."], ["❓", "Answer the question of the colour you get.", "Respon la pregunta del color que surti."], ["🔟", "10 spins. Get as many points as you can!", "10 tirades. Aconsegueix el màxim de punts!"]];const META={title:"All About Me Wheel",emoji:"🎡",sub:"3r · Starter"};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+(function(){const t=D.theme||{};const r=document.documentElement.style;for(const k in t)r.setProperty('--'+k,t[k])})();
+function picHTML(v,cls='pic'){if(v==null)return'';if(typeof v==='number')return IMG[v]?`<img class="${cls}" src="${IMG[v]}" alt="" draggable="false">`:'';return `<span class="emo">${v}</span>`}
+let SND=true,VOICE=true;try{SND=localStorage.getItem('snd')!=='0';VOICE=localStorage.getItem('voice')!=='0'}catch(e){}
+let ac;function tone(f,d=.12,v=.1,w=0,t='triangle'){if(!SND)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,ac.currentTime+w);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+w+d);o.connect(g).connect(ac.destination);o.start(ac.currentTime+w);o.stop(ac.currentTime+w+d)}catch(e){}}
+const GOODW=['Great! 🎉','Well done! ⭐','Awesome! 🚀','Super! 💪','Fantastic! ✨','Brilliant! 🌟','Yes! 👏'],BADW=['Try again! 💪','Oops! 🙈','Nearly! 🤏','Keep going! 🍀'];let mT,mLast=0;
+function mascot(ok){const n=Date.now();if(n-mLast<600)return;mLast=n;const m=$('#mascot');if(!m)return;$('#mb').textContent=pick(ok?GOODW:BADW);$('#mf').textContent=ok?pick(['🦉','🦉','🥳']):'🦉';m.className='mascot show '+(ok?'good':'bad');clearTimeout(mT);mT=setTimeout(()=>m.classList.remove('show'),1300)}
+const sGood=()=>{mascot(1);[660,880,1100].forEach((f,i)=>tone(f,.14,.1,i*.08,'sine'))},sBad=()=>{mascot(0);tone(180,.3,.08,0,'sawtooth')},sClick=()=>tone(520,.06,.07),sWin=()=>[523,659,784,1046,784,1046,1318].forEach((f,i)=>tone(f,.2,.1,i*.13));
+let VOX=null;function pickVoice(){try{const v=speechSynthesis.getVoices();VOX=v.find(x=>/en-GB/i.test(x.lang)&&/female|Google UK English Female|Serena|Kate|Libby|Sonia/i.test(x.name))||v.find(x=>/en-GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}catch(e){}}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
+function say(t,force){try{if(!t||(!VOICE&&!force))return;const u=new SpeechSynthesisUtterance(String(t).replace(/<[^>]+>/g,'').replace(/[’]/g,"'").replace(/[“”]/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}✅❌]/gu,''));u.lang='en-GB';if(VOX)u.voice=VOX;u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function toast(h,ms=1500){const t=$('#toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms)}
+function modal(h){$('#mbox').innerHTML=h;$('#modal').classList.add('show')}
+function closeModal(){$('#modal').classList.remove('show')}
+function stars(n){return '⭐'.repeat(n)+'☆'.repeat(3-n)}
+function endScreen(title,lines,st,again){sWin();rain();modal(`<div class="big">🏆</div><h2>${title}</h2><div style="font-size:46px;letter-spacing:4px">${stars(st)}</div>${lines.filter(Boolean).map(l=>`<p>${l}</p>`).join('')}<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px"><button class="btn" id="again">Play again 🔄</button>${D.theory?'<button class="btn sec" id="relearn">📖 Learn</button>':''}<a class="btn sec" href="index.html" style="text-decoration:none">🏠 Menu</a></div>`);$('#again').onclick=()=>{closeModal();again()};const rl=$('#relearn');if(rl)rl.onclick=()=>{closeModal();openTheory()}}
+const cv=$('#fx'),cx=cv.getContext('2d');let parts=[],run=false;function rs(){cv.width=innerWidth;cv.height=innerHeight}addEventListener('resize',rs);rs();
+const COL=['#ffcf3f','#ff5c8a','#22b35b','#38bdf8','#a78bfa','#fff'];
+function burst(el,n=30){const r=el.getBoundingClientRect?el.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0,height:0};for(let i=0;i<n;i++)parts.push({x:r.left+r.width/2,y:r.top+r.height/2,vx:(Math.random()-.5)*10,vy:(Math.random()-.9)*9,s:4+Math.random()*6,c:COL[i%6],l:60});loop()}
+function rain(){for(let i=0;i<170;i++)parts.push({x:Math.random()*cv.width,y:-Math.random()*cv.height*.6,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,s:5+Math.random()*7,c:COL[i%6],l:240});loop()}
+function loop(){if(run)return;run=true;(function f(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.l-->0);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.17;cx.fillStyle=p.c;cx.fillRect(p.x,p.y,p.s,p.s*.6)});if(parts.length)requestAnimationFrame(f);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}})()}
+function qOpts(it){return shuffle([it.a,...it.w])}
+function qText(it){return it.q.replace('___','<span class="blank">___</span>')}
+function qSay(it){return it.say||(it.q.includes('___')?it.q.replace('___',it.a):it.q+' '+it.a)}
+// ---------- tools ----------
+function setTool(){$('#tSnd').classList.toggle('off',!SND);$('#tSnd').textContent=SND?'🔊':'🔇';$('#tVoice').classList.toggle('off',!VOICE)}
+$('#tSnd').onclick=()=>{SND=!SND;try{localStorage.setItem('snd',SND?'1':'0')}catch(e){}setTool();if(SND)sClick()};
+$('#tVoice').onclick=()=>{VOICE=!VOICE;try{localStorage.setItem('voice',VOICE?'1':'0')}catch(e){}setTool();if(VOICE)say('Voice on')};
+$('#tFs').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+setTool();
+// ---------- theory ----------
+const hl=s=>String(s).replace(/\{([^}]+)\}/g,'<mark>$1</mark>');
+const plain=s=>String(s).replace(/[{}]/g,'').replace(/<[^>]+>/g,'');
+function openTheory(tab){const T=D.theory;if(!T)return;const tabs=[];if(T.vocab&&T.vocab.length)tabs.push(['v','🖼️ Words']);if(T.grammar&&T.grammar.length)tabs.push(['g','🧩 Grammar']);if(T.check&&T.check.length)tabs.push(['c','✅ Check']);
+ let h=`<div class="thhead"><h2>📖 Learn first!<small>${T.title||META.sub}</small></h2><div style="display:flex;gap:8px"><button class="tb" id="caT" style="background:rgba(0,0,0,.2)">🗨️ Català: ON</button><button class="btn" id="thPlay">▶ Play</button></div></div><div class="ttabs">${tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join('')}</div>`;
+ if(T.vocab)h+=`<div class="tsec" id="ts-v"><p style="color:#fff;font-weight:600;margin-bottom:10px">👆 Tap a card to hear the word.</p><div class="vgrid">${T.vocab.map((v,i)=>`<button class="vc" data-i="${i}"><div class="vi">${picHTML(v.img)}</div><div class="vw">${v.w}</div><div class="vca ca-x">${v.ca||''}</div></button>`).join('')}</div></div>`;
+ if(T.grammar)h+=`<div class="tsec" id="ts-g"><div class="gcards">${T.grammar.map(g=>`<div class="gc"><h3>${g.ic||'🧩'} ${g.t}</h3>${g.ca?`<div class="ca ca-x">${g.ca}</div>`:''}${g.table?`<table class="gtable">${g.table.map((r,ri)=>`<tr>${r.map(c=>ri===0&&g.thead?`<th>${c}</th>`:`<td>${hl(c)}</td>`).join('')}</tr>`).join('')}</table>`:''}${g.ex?`<div class="exs">${g.ex.map(e=>{const [en,tr]=Array.isArray(e)?e:[e,''];return `<button class="ex" data-s="${plain(en).replace(/"/g,'&quot;')}"><span class="spk">🔊</span><span>${hl(en)}${tr?`<span class="tr ca-x">${tr}</span>`:''}</span></button>`}).join('')}</div>`:''}</div>`).join('')}</div></div>`;
+ if(T.check)h+=`<div class="tsec" id="ts-c"><div class="qc" id="qc"></div></div>`;
+ h+=`<div class="thfoot"><button class="btn" id="thPlay2" style="font-size:23px;padding:14px 34px">▶ I’m ready! Let’s play!</button></div>`;
+ $('#th').innerHTML=h;$('#theory').classList.add('show');$('#intro').classList.remove('show');$('#theory').scrollTop=0;
+ const sel=t=>{$$('.ttabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));$$('.tsec').forEach(s=>s.classList.toggle('on',s.id==='ts-'+t));if(t==='c')check(0,[])};
+ $$('.ttabs button').forEach(b=>b.onclick=()=>{sClick();sel(b.dataset.t)});sel(tab||tabs[0][0]);
+ $$('.vc').forEach(b=>b.onclick=()=>{$$('.vc').forEach(x=>x.classList.remove('play'));b.classList.add('play');say(T.vocab[+b.dataset.i].say||T.vocab[+b.dataset.i].w,1)});
+ $$('.ex').forEach(b=>b.onclick=()=>say(b.dataset.s,1));
+ let caOn=true;$('#caT').onclick=()=>{caOn=!caOn;$('#caT').textContent='🗨️ Català: '+(caOn?'ON':'OFF');$$('.ca-x').forEach(e=>e.style.display=caOn?'':'none')};
+ $('#thPlay').onclick=$('#thPlay2').onclick=()=>{$('#theory').classList.remove('show');startGame()};
+}
+function check(i,res){const T=D.theory,C=T.check;const box=$('#qc');if(i>=C.length){const ok=res.filter(Boolean).length;box.innerHTML=`<div class="qcp">${res.map(r=>`<i class="${r?'ok':'no'}"></i>`).join('')}</div><div style="font-size:60px">${ok===C.length?'🌟':ok>=C.length/2?'👍':'💪'}</div><h3>${ok}/${C.length} correct!</h3><p>${ok===C.length?'Perfect! You are ready!':'Look at the grammar again or try the game!'}</p><br><button class="btn sec" id="qcr">🔄 Try again</button>`;$('#qcr').onclick=()=>check(0,[]);if(ok===C.length){sWin();burst(box,40)}return}
+ const it=C[i];box.innerHTML=`<div class="qcp">${C.map((_,k)=>`<i class="${k<i?(res[k]?'ok':'no'):''}"></i>`).join('')}</div><p style="color:#6b6790;font-weight:600">Question ${i+1}/${C.length}</p>${it.img!=null?`<div style="width:130px;aspect-ratio:1;border-radius:16px;overflow:hidden;margin:6px auto">${picHTML(it.img)}</div>`:''}<h3>${qText(it)}</h3><div class="opts">${qOpts(it).map(o=>`<button class="opt">${o}</button>`).join('')}</div>`;
+ $$('#qc .opt').forEach(b=>b.onclick=()=>{if(b.disabled)return;$$('#qc .opt').forEach(x=>x.disabled=true);const ok=b.textContent===it.a;b.classList.add(ok?'ok':'no');if(!ok)$$('#qc .opt').find(x=>x.textContent===it.a).classList.add('ok');ok?sGood():sBad();say(qSay(it));res.push(ok);setTimeout(()=>check(i+1,res),1500)})}
+function openIntro(){$('#introbox').innerHTML=`<div class="ie">${META.emoji}</div><h2>${META.title}</h2><div class="is">${META.sub}</div><div class="how">${HOW.map(h=>`<div><b>${h[0]}</b><span>${h[1]}${h[2]?`<small>${h[2]}</small>`:''}</span></div>`).join('')}</div><div class="ibtns">${D.theory?'<button class="btn learnb" id="iLearn">📖 Learn first</button>':''}<button class="btn" id="iPlay">▶ Let’s play!</button></div>`;
+ $('#intro').classList.add('show');$('#iPlay').onclick=()=>{$('#intro').classList.remove('show');startGame()};const l=$('#iLearn');if(l)l.onclick=()=>openTheory()}
+$('#tLearn').onclick=()=>openTheory();$('#tHow').onclick=()=>openIntro();
+if(!D.theory)$('#tLearn').style.display='none';
+let __started=false;function startGame(){try{if(ac&&ac.state==='suspended')ac.resume()}catch(e){}if(__started)return;__started=true;__GAME__()}
+function __GAME__(){
+const WH=D.wheel,SEG=WH.segs,NS=SEG.length;const cv2=$('#wh'),g=cv2.getContext('2d');let ang=0,spinning=false,mode=1,teams,cur,rn,used;
+function drawW(){g.clearRect(0,0,600,600);const R=290,a=2*Math.PI/NS;
+ for(let i=0;i<NS;i++){const s=ang+i*a-Math.PI/2;g.beginPath();g.moveTo(300,300);g.arc(300,300,R,s,s+a);g.closePath();g.fillStyle=SEG[i].c;g.fill();g.strokeStyle='#fff';g.lineWidth=6;g.stroke();
+  const mid=s+a/2,flip=Math.cos(mid)<-0.01;g.save();g.translate(300,300);g.rotate(mid);g.textBaseline='middle';g.font='52px sans-serif';g.textAlign='center';g.fillText(SEG[i].ic,R-50,0);g.font='700 26px Fredoka, sans-serif';g.fillStyle='#fff';g.strokeStyle='rgba(0,0,0,.35)';g.lineWidth=5;
+  if(flip){g.translate(R-88,0);g.rotate(Math.PI);g.textAlign='left';g.strokeText(SEG[i].n,0,0);g.fillText(SEG[i].n,0,0)}else{g.textAlign='right';g.strokeText(SEG[i].n,R-88,0);g.fillText(SEG[i].n,R-88,0)}g.restore()}
+ g.beginPath();g.arc(300,300,R,0,7);g.lineWidth=10;g.strokeStyle='#fff';g.stroke();
+ for(let i=0;i<NS*2;i++){const t=i*Math.PI/NS;g.beginPath();g.arc(300+Math.cos(t)*(R-4),300+Math.sin(t)*(R-4),7,0,7);g.fillStyle=i%2?'#ffd84d':'#fff';g.fill()}}
+function drawT(){$('#teams').innerHTML=teams.map((t,k)=>`<div class="tm ${k===cur&&teams.length>1?'cur':''}"><span>${t.n}</span><span>⭐ ${t.s}</span></div>`).join('');$('#rn').textContent=`${rn}/10`}
+function start(){teams=mode===1?[{n:'🧒 You',s:0}]:[{n:'🔵 Team A',s:0},{n:'🔴 Team B',s:0}];cur=0;rn=0;used=new Set();drawT();
+ $('#panel').innerHTML=`<h2>${WH.title||'Spin the wheel!'}</h2><p>Press <b>SPIN!</b> and answer the question. 10 spins. Good luck! 🍀</p>`}
+function spin(){if(spinning)return;if(rn>=10)return;spinning=true;const target=Math.random()*Math.PI*2+Math.PI*2*(5+Math.random()*2),from=ang,dur=3800,t0=performance.now();let last=0;
+ (function f(now){const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);ang=from+target*e;drawW();const tick=Math.floor(ang/(Math.PI/NS));if(tick!==last){last=tick;tone(900,.03,.05)}if(p<1)requestAnimationFrame(f);else done()})(t0)}
+function done(){const a=2*Math.PI/NS;let rel=((-ang)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);const i=Math.floor(rel/a)%NS;const S=SEG[i];
+ let pool=S.items.filter(x=>!used.has(x.q+x.a));if(!pool.length)pool=S.items;const it=pick(pool);used.add(it.q+it.a);rn++;drawT();
+ $('#panel').innerHTML=`<span class="tag" style="background:${S.c}">${S.ic} ${S.n}</span> ${teams.length>1?`<b>${teams[cur].n}</b>`:''}${it.img!=null?`<div style="width:160px;aspect-ratio:1;border-radius:14px;overflow:hidden;margin:8px auto">${picHTML(it.img)}</div>`:''}<h2>${qText(it)}</h2><div class="opts">${qOpts(it).map(o=>`<button class="opt">${o}</button>`).join('')}</div><div class="res" id="res"></div>`;
+ if(it.listen)say(it.q);
+ $$('#panel .opt').forEach(b=>b.onclick=()=>{if(b.disabled)return;$$('#panel .opt').forEach(x=>x.disabled=true);const ok=b.textContent===it.a;
+  if(ok){b.classList.add('ok');sGood();teams[cur].s+=100;burst(b);$('#res').textContent='✅ +100!'}else{b.classList.add('no');sBad();$$('#panel .opt').find(x=>x.textContent===it.a).classList.add('ok');$('#res').textContent='❌ Oh no!'}
+  say(qSay(it));spinning=false;if(teams.length>1)cur=1-cur;drawT();
+  if(rn>=10)setTimeout(()=>{const r=[...teams].sort((a,b)=>b.s-a.s);const st=teams.length>1?3:(r[0].s>=800?3:r[0].s>=500?2:1);endScreen(teams.length>1?(teams[0].s===teams[1].s?'It’s a draw!':r[0].n+' wins!'):'Well done!',r.map(x=>`${x.n}: ⭐ ${x.s}`),st,start)},1500);
+  else $('#res').insertAdjacentHTML('beforeend',' <br><small>Spin again! 🎡</small>')})}
+$('#spin').onclick=spin;
+$$('#mode button').forEach(b=>b.onclick=()=>{$$('#mode button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=+b.dataset.v;start()});
+drawW();start();
+;window.__ev=s=>eval(s);
+}
+openIntro();
+</script></body></html>

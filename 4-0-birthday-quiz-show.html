@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Birthday Quiz Show</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--c1:#6c4cf5;--c2:#ff5c8a;--acc:#ffcf3f;--ink:#26214a;--card:#fff;--soft:#f2efff;--good:#22b35b;--bad:#e5484d;--r:20px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--c1)}
+body{font-family:'Fredoka',system-ui,sans-serif;color:var(--ink);min-height:100vh;padding:12px 16px 30px;overflow-x:hidden;background:radial-gradient(circle at 12% 18%,rgba(255,255,255,.16) 0 70px,transparent 71px),radial-gradient(circle at 88% 78%,rgba(255,255,255,.12) 0 110px,transparent 111px),radial-gradient(circle at 70% 8%,rgba(255,255,255,.1) 0 40px,transparent 41px),linear-gradient(135deg,var(--c1),var(--c2)) fixed}
+button{font-family:'Fredoka',sans-serif}
+.wrap{max-width:1080px;margin:0 auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.top h1{color:#fff;font-size:clamp(24px,4.6vw,42px);line-height:1;text-shadow:0 3px 0 rgba(0,0,0,.18)}
+.top h1 small{display:block;font-size:.4em;font-weight:600;opacity:.95;margin-top:5px}
+.tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tb{border:0;color:#fff;font-weight:700;background:rgba(0,0,0,.2);padding:7px 13px;border-radius:999px;font-size:15px;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;transition:.15s}
+.tb:hover{background:rgba(0,0,0,.32)}
+.tb.learn{background:#fff;color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.tb.off{opacity:.55}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--card);border-radius:999px;padding:5px 14px;font-weight:700;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.hud{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.panel{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:0 6px 0 rgba(0,0,0,.15)}
+.btn{font:700 19px 'Fredoka',sans-serif;border:0;border-radius:14px;padding:11px 22px;cursor:pointer;background:var(--acc);color:#3a2a00;box-shadow:0 5px 0 rgba(0,0,0,.25);transition:transform .1s}
+.btn:hover{transform:translateY(-2px)}
+.btn.sec{background:var(--soft);color:var(--ink)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.opt{font:600 clamp(16px,2.4vw,20px) 'Fredoka',sans-serif;border:0;border-radius:14px;padding:11px 14px;cursor:pointer;background:var(--soft);color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.12);text-align:center;transition:transform .1s,background .15s}
+.opt:hover:not(:disabled){transform:translateY(-2px);background:#e7e1ff}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--good)!important;color:#fff!important;animation:okp .4s}
+.opt.no{background:var(--bad)!important;color:#fff!important;animation:shake .4s}
+@keyframes okp{50%{transform:scale(1.05)}}
+.blank{display:inline-block;min-width:70px;border-bottom:3px dashed #aaa;color:transparent}
+.pic{display:block;width:100%;height:100%;object-fit:cover}
+.emo{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:clamp(34px,6vw,70px);background:var(--soft)}
+.modal{position:fixed;inset:0;background:rgba(20,15,45,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:40;backdrop-filter:blur(2px)}
+.modal.show{display:flex}
+.mbox{background:var(--card);border-radius:26px;max-width:540px;width:100%;padding:22px;text-align:center;box-shadow:0 10px 0 rgba(0,0,0,.2);animation:pop .4s cubic-bezier(.3,1.6,.5,1);max-height:94vh;overflow:auto}
+.mbox h2{font-size:clamp(24px,4vw,34px);margin:6px 0}
+.mbox .big{font-size:64px;line-height:1}
+.mbox p{font-size:18px;margin:6px 0}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.shake{animation:shake .4s}
+.toast{position:fixed;left:50%;top:14px;transform:translate(-50%,-90px);background:var(--card);padding:10px 22px;border-radius:16px;font-weight:700;font-size:clamp(18px,3vw,26px);box-shadow:0 8px 0 rgba(0,0,0,.2);transition:.35s;z-index:80;max-width:92vw;text-align:center}
+.toast.show{transform:translate(-50%,0)}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:90}
+.mascot{position:fixed;left:14px;bottom:14px;z-index:85;display:flex;align-items:flex-end;gap:6px;pointer-events:none;transform:translateY(140%);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.mascot.show{transform:none}
+.mascot .mf{font-size:clamp(46px,6vw,64px);line-height:1;filter:drop-shadow(0 4px 0 rgba(0,0,0,.2))}
+.mascot .mb{background:#fff;border-radius:18px 18px 18px 4px;padding:8px 14px;font-weight:700;font-size:clamp(16px,2.2vw,20px);box-shadow:0 5px 0 rgba(0,0,0,.18);margin-bottom:34px;white-space:nowrap}
+.mascot.good .mb{color:#15803d}.mascot.bad .mb{color:#b91c1c}
+/* ---------- intro & theory ---------- */
+.ov{position:fixed;inset:0;z-index:70;display:none;overflow:auto;padding:18px 14px 30px;background:linear-gradient(135deg,var(--c1),var(--c2))}
+.ov.show{display:block}
+.introbox{max-width:620px;margin:4vh auto 0;background:#fff;border-radius:30px;padding:26px 22px;text-align:center;box-shadow:0 12px 0 rgba(0,0,0,.2);animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+.introbox .ie{font-size:76px;line-height:1;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-4deg)}}
+.introbox h2{font-size:clamp(28px,5vw,40px);margin:8px 0 2px}
+.introbox .is{color:#6b6790;font-weight:600;font-size:17px}
+.how{text-align:left;margin:18px 0;display:grid;gap:10px}
+.how div{display:flex;gap:12px;align-items:center;background:var(--soft);border-radius:16px;padding:10px 14px;font-size:18px;font-weight:600}
+.how div b{font-size:28px;flex-shrink:0;width:36px;text-align:center}
+.how div small{display:block;font-weight:500;color:#6b6790;font-size:14px}
+.ibtns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.ibtns .btn{font-size:21px;padding:14px 26px}
+.ibtns .btn.learnb{background:#fff;color:var(--ink);border:3px solid var(--c1);box-shadow:0 5px 0 var(--c1)}
+.th{max-width:980px;margin:0 auto}
+.thhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#fff;margin-bottom:14px}
+.thhead h2{font-size:clamp(26px,4.6vw,40px);text-shadow:0 3px 0 rgba(0,0,0,.2);line-height:1.05}
+.thhead h2 small{display:block;font-size:.45em;opacity:.95;font-weight:600}
+.ttabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.ttabs button{border:0;border-radius:999px;padding:9px 18px;font-weight:700;font-size:17px;cursor:pointer;background:rgba(255,255,255,.3);color:#fff}
+.ttabs button.on{background:#fff;color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.tsec{display:none}.tsec.on{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.vc{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,.15);cursor:pointer;border:0;padding:0;text-align:center;transition:transform .15s}
+.vc:hover{transform:translateY(-4px) rotate(-1deg)}
+.vc .vi{aspect-ratio:1/0.85;overflow:hidden}
+.vc .vi .emo{font-size:58px}
+.vc .vw{font-weight:700;font-size:19px;padding:7px 6px 2px;color:var(--ink)}
+.vc .vca{font-size:14px;color:#8a86a8;padding-bottom:8px;min-height:22px}
+.vc.play{outline:4px solid var(--acc)}
+.gcards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));align-items:start}
+.gc{background:#fff;border-radius:22px;padding:18px;box-shadow:0 6px 0 rgba(0,0,0,.15)}
+.gc h3{font-size:clamp(20px,3vw,25px);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.gc .ca{background:#fff7d6;border-left:6px solid var(--acc);border-radius:12px;padding:10px 12px;font-size:16px;margin:8px 0 12px;line-height:1.4}
+.gc .ca b{color:#9a6b00}
+.exs{display:grid;gap:8px}
+.ex{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:14px;padding:9px 12px;font-size:clamp(17px,2.4vw,21px);font-weight:600;cursor:pointer;border:0;text-align:left;color:var(--ink);width:100%}
+.ex:hover{background:#e7e1ff}
+.ex .spk{font-size:20px;flex-shrink:0}
+.ex mark{background:var(--acc);border-radius:6px;padding:0 4px;color:#3a2a00}
+.ex .tr{display:block;font-size:14px;color:#8a86a8;font-weight:500}
+.gtable{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:clamp(16px,2.3vw,20px);margin-top:4px}
+.gtable td,.gtable th{padding:8px 10px;text-align:left}
+.gtable th{font-size:14px;color:#6b6790;text-transform:uppercase;letter-spacing:.5px}
+.gtable td{background:var(--soft);font-weight:600}
+.gtable tr td:first-child{border-radius:12px 0 0 12px}.gtable tr td:last-child{border-radius:0 12px 12px 0}
+.gtable mark{background:var(--acc);border-radius:6px;padding:0 4px}
+.thfoot{text-align:center;margin-top:20px}
+.qc{background:#fff;border-radius:22px;padding:18px;box-shadow:0 6px 0 rgba(0,0,0,.15);max-width:620px;margin:0 auto;text-align:center}
+.qc h3{font-size:clamp(20px,3vw,26px);margin:8px 0 12px}
+.qc .opts{display:grid;gap:8px}
+.qcp{display:flex;gap:6px;justify-content:center;margin-bottom:6px}.qcp i{width:14px;height:14px;border-radius:50%;background:#e4e0f5}.qcp i.ok{background:var(--good)}.qcp i.no{background:var(--bad)}
+@media (max-width:600px){.vgrid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}.vc .vw{font-size:16px}.how div{font-size:16px}.tools .tb span{display:none}}
+body{background:radial-gradient(ellipse at 50% 0%,#2b3a9e 0,#0f1650 60%) fixed #0f1650!important}
+html{background:#0f1650}
+.teams{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.tm{flex:1 1 140px;background:#fff;border-radius:16px;padding:8px 12px;font-weight:700;display:flex;justify-content:space-between;align-items:center;border:4px solid transparent;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.tm.cur{border-color:var(--acc);transform:translateY(-3px)}
+.tm b{font-size:24px}
+.jb{display:grid;gap:8px}
+.ch{background:linear-gradient(#ffcf3f,#f5a90b);color:#2a1d00;border-radius:12px;padding:8px 4px;text-align:center;font-weight:700;font-size:clamp(11px,1.6vw,17px);line-height:1.1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:64px;box-shadow:0 4px 0 rgba(0,0,0,.3)}
+.ch .i{font-size:clamp(20px,3vw,30px)}
+.cell{font:700 clamp(20px,3.4vw,36px) 'Fredoka',sans-serif;background:linear-gradient(#3557e8,#1f37b8);color:#ffd84d;border:0;border-radius:12px;min-height:clamp(52px,9vh,84px);cursor:pointer;box-shadow:0 5px 0 #0b1a6b,inset 0 2px 0 rgba(255,255,255,.25);text-shadow:0 2px 0 #000;transition:.15s}
+.cell:hover{transform:scale(1.04)}
+.cell.used{background:#18225e;color:transparent;box-shadow:none;cursor:default;text-shadow:none}
+.cell.used.ok{background:#14532d}.cell.used.no{background:#5e1818}
+.mbox .im{width:100%;max-width:300px;margin:6px auto;aspect-ratio:1/0.75;border-radius:16px;overflow:hidden}
+.mbox .im .emo{font-size:80px}
+.mbox h2 .blank{display:inline-block;min-width:70px;border-bottom:3px dashed #aaa;color:transparent}
+.mbox .opts{display:grid;gap:8px;margin-top:10px}
+.mbox .val{display:inline-block;background:#1f37b8;color:#ffd84d;border-radius:999px;padding:3px 14px;font-weight:700}
+.setup .row{display:flex;gap:8px;justify-content:center;margin:14px 0}
+.setup .row button{font:700 22px 'Fredoka',sans-serif;width:60px;height:60px;border-radius:16px;border:0;background:var(--soft);cursor:pointer}
+.setup .row button.on{background:var(--acc)}
+/*FILL*/
+.tm{font-size:22px;padding:12px 18px}.tm b{font-size:34px}
+.ch{min-height:clamp(70px,11vh,110px);font-size:clamp(13px,1.6vw,22px)}
+.ch .i{font-size:clamp(24px,3vw,40px)}
+.cell{min-height:calc((var(--avh) - 210px) / 5);font-size:clamp(24px,4vw,56px)}
+.jb{gap:10px}
+@media (max-width:760px){.cell{min-height:56px}}
+
+/* ===== BIG UI ===== */
+.wrap{max-width:1500px}
+body{padding:10px 18px 18px}
+.top{margin-bottom:10px}
+.top h1{font-size:clamp(28px,3.6vw,46px)}
+.top h1 small{font-size:.42em}
+.tb{font-size:17px;padding:10px 16px}
+.pill{font-size:clamp(17px,1.6vw,21px);padding:8px 18px}
+.hud{gap:10px;margin-bottom:12px}
+.btn{font-size:clamp(19px,1.8vw,24px);padding:14px 28px;border-radius:16px}
+.opt{font-size:clamp(19px,2vw,28px);padding:16px 18px;border-radius:16px;min-height:62px}
+.seg{display:flex;background:rgba(255,255,255,.92);border-radius:999px;padding:5px;box-shadow:0 4px 0 rgba(0,0,0,.15);gap:2px}
+.seg button{font:700 clamp(15px,1.4vw,19px) 'Fredoka',sans-serif;border:0;background:transparent;padding:10px 18px;border-radius:999px;cursor:pointer;color:var(--ink);transition:.15s}
+.seg button:hover{background:var(--soft)}
+.seg button.on{background:var(--c1);color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+.mbox{max-width:780px;padding:28px}
+.mbox h2{font-size:clamp(26px,3.2vw,40px);line-height:1.2}
+.mbox .opts{gap:12px!important}
+.mbox .opt{font-size:clamp(20px,2.2vw,30px)}
+.mbox .im{max-width:420px!important}
+.mbox p{font-size:20px}
+.panel{padding:20px;border-radius:24px}
+:root{--avh:calc(100vh - 165px)}
+@media (max-width:760px){:root{--avh:auto}.opt{min-height:52px}.btn{padding:12px 20px}}
+</style></head><body>
+<canvas id="fx"></canvas>
+<div class="wrap">
+ <div class="top"><h1>🎤 Birthday Quiz Show<small>4t · Starter</small></h1>
+  <div class="tools"><button class="tb learn" id="tLearn">📖 <span>Learn</span></button><button class="tb" id="tHow">❔ <span>How to play</span></button><button class="tb" id="tSnd" title="Sound">🔊</button><button class="tb" id="tVoice" title="Voice">🗣️</button><button class="tb" id="tFs" title="Full screen">⛶</button><a class="tb" href="index.html">🏠 <span>Menu</span></a></div></div>
+ <div class="teams" id="teams"></div>
+<div class="jb" id="jb"></div>
+</div>
+<div class="ov" id="intro"><div class="introbox" id="introbox"></div></div>
+<div class="ov" id="theory"><div class="th" id="th"></div></div>
+<div class="toast" id="toast"></div>
+<div class="mascot" id="mascot"><div class="mf" id="mf">🦉</div><div class="mb" id="mb"></div></div>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<script>
+const D={"theme": {"c1": "#ec4899", "c2": "#f59e0b"}, "jep": {"title": "Birthday Quiz Show", "cats": [{"ic": "🔢", "name": "1st, 2nd, 3rd…", "items": [{"q": "🔢 1st", "a": "first", "w": ["second", "fourth"], "say": "first"}, {"q": "🔢 2nd", "a": "second", "w": ["third", "first"], "say": "second"}, {"q": "🔢 3rd", "a": "third", "w": ["fourth", "second"], "say": "third"}, {"q": "🔢 5th", "a": "fifth", "w": ["sixth", "fourth"], "say": "fifth"}, {"q": "🔢 8th", "a": "eighth", "w": ["ninth", "seventh"], "say": "eighth"}]}, {"ic": "🗓️", "name": "Months", "items": [{"q": "🗓️ The first month is ___.", "a": "January", "w": ["June", "March"]}, {"q": "🗓️ The month after March is ___.", "a": "April", "w": ["May", "February"]}, {"q": "🎄 Christmas is in ___.", "a": "December", "w": ["November", "January"]}, {"q": "🗓️ The month before September is ___.", "a": "August", "w": ["October", "July"]}, {"q": "🗓️ Which month has got 28 days?", "a": "February", "w": ["April", "November"]}]}, {"ic": "🎂", "name": "Birthdays", "items": [{"q": "🎂 31/3 — When’s your birthday? It’s ___.", "a": "on the thirty-first of March", "w": ["on the first of March", "on the thirty-first of April"], "say": "It’s on the thirty-first of March."}, {"q": "🎂 1/1 — When’s your birthday? It’s ___.", "a": "on the first of January", "w": ["on the second of January", "on the first of February"], "say": "It’s on the first of January."}, {"q": "🎂 12/6 — When’s your birthday? It’s ___.", "a": "on the twelfth of June", "w": ["on the thirteenth of June", "on the twelfth of July"], "say": "It’s on the twelfth of June."}, {"q": "🎂 25/12 — When’s your birthday? It’s ___.", "a": "on the twenty-fifth of December", "w": ["on the twenty-sixth of December", "on the twenty-fifth of January"], "say": "It’s on the twenty-fifth of December."}, {"q": "🎂 3/10 — When’s your birthday? It’s ___.", "a": "on the third of October", "w": ["on the fourth of October", "on the third of November"], "say": "It’s on the third of October."}]}, {"ic": "👨‍👩‍👧", "name": "Family", "items": [{"q": "👴 Who is it? (Lily’s family)", "a": "Grandad", "w": ["granny", "friend"]}, {"q": "👵 Who is it? (Lily’s family)", "a": "Granny", "w": ["grandad", "friend"]}, {"q": "👩 Who is it? (Lily’s family)", "a": "Mum", "w": ["dad", "friend"]}, {"q": "👨 Who is it? (Lily’s family)", "a": "Dad", "w": ["mum", "friend"]}, {"q": "👦 Who is it? (Lily’s family)", "a": "brother", "w": ["sister", "friend"]}]}, {"ic": "💬", "name": "Talk", "items": [{"q": "“How are you?”", "a": "I’m fine, thank you.", "w": ["I’m ten.", "My name’s Lily."]}, {"q": "“How old are you?”", "a": "I’m ten years old.", "w": ["I’m fine.", "It’s on the tenth."]}, {"q": "“When’s your birthday?”", "a": "It’s on the fifth of May.", "w": ["It’s five o’clock.", "I’m five."]}, {"q": "“Let’s meet my ___.” 👨‍👩‍👧", "a": "family", "w": ["birthday", "fine"]}, {"q": "🎉 “It’s my tenth ___ today!”", "a": "birthday", "w": ["family", "month"]}]}]}, "theory": {"title": "4t · Starter · All about my birthday", "vocab": [{"img": "🥇", "w": "first · 1st", "ca": "primer"}, {"img": "🥈", "w": "second · 2nd", "ca": "segon"}, {"img": "🥉", "w": "third · 3rd", "ca": "tercer"}, {"img": "4️⃣", "w": "fourth · 4th", "ca": "quart"}, {"img": "5️⃣", "w": "fifth · 5th", "ca": "cinquè"}, {"img": "🔟", "w": "tenth · 10th", "ca": "desè"}, {"img": "🎂", "w": "twenty-first · 21st", "ca": "vint-i-unè"}, {"img": "📅", "w": "thirty-first · 31st", "ca": "trenta-unè"}, {"img": "👴", "w": "Grandad", "ca": "avi"}, {"img": "👵", "w": "Granny", "ca": "àvia"}, {"img": "🧑", "w": "cousin", "ca": "cosí/cosina"}, {"img": "👩‍🦰", "w": "aunt", "ca": "tieta"}, {"img": "👨‍🦱", "w": "uncle", "ca": "tiet"}, {"img": "👦", "w": "brother", "ca": "germà"}, {"img": "👧", "w": "sister", "ca": "germana"}], "grammar": [{"ic": "🔢", "t": "Ordinal numbers", "ca": "Per a les dates fem servir els ordinals. La majoria acaben en <b>-th</b>. Compte amb els especials!", "table": [["1st", "{first}"], ["2nd", "{second}"], ["3rd", "{third}"], ["4th", "fourth"], ["5th", "{fifth}"], ["12th", "{twelfth}"], ["20th", "twentieth"], ["21st", "twenty-{first}"], ["22nd", "twenty-{second}"], ["31st", "thirty-{first}"]]}, {"ic": "🗓️", "t": "The months", "ca": "Els mesos sempre amb <b>MAJÚSCULA</b>.", "ex": [["January, February, March, April", "gener, febrer, març, abril"], ["May, June, July, August", "maig, juny, juliol, agost"], ["September, October, November, December", "setembre, octubre, novembre, desembre"]]}, {"ic": "🎂", "t": "When’s your birthday?", "ca": "Responem amb <b>on the</b> + ordinal + <b>of</b> + mes.", "ex": [["When’s your birthday?", "Quan és el teu aniversari?"], ["It’s {on the} thirty-first {of} March.", "És el 31 de març."], ["It’s my {tenth} birthday today!", "Avui faig 10 anys!"]]}], "check": [{"q": "🔢 3rd", "a": "third", "w": ["three", "thirth"]}, {"q": "When’s your birthday?", "a": "It’s on the fifth of May.", "w": ["It’s five May.", "It’s on five of May."]}, {"q": "🎄 Christmas is in ___.", "a": "December", "w": ["december", "November"]}, {"q": "👩‍🦰 My mum’s sister is my ___.", "a": "aunt", "w": ["uncle", "cousin"]}]}};const IMG=[];const HOW=[["👥", "Make teams.", "Feu equips."], ["🔢", "Choose a category and points.", "Tria categoria i punts."], ["💪", "Bigger number = harder question.", "Com més punts, més difícil."], ["🏆", "The team with most points wins!", "Guanya l’equip amb més punts!"]];const META={title:"Birthday Quiz Show",emoji:"🎤",sub:"4t · Starter"};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+(function(){const t=D.theme||{};const r=document.documentElement.style;for(const k in t)r.setProperty('--'+k,t[k])})();
+function picHTML(v,cls='pic'){if(v==null)return'';if(typeof v==='number')return IMG[v]?`<img class="${cls}" src="${IMG[v]}" alt="" draggable="false">`:'';return `<span class="emo">${v}</span>`}
+let SND=true,VOICE=true;try{SND=localStorage.getItem('snd')!=='0';VOICE=localStorage.getItem('voice')!=='0'}catch(e){}
+let ac;function tone(f,d=.12,v=.1,w=0,t='triangle'){if(!SND)return;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,ac.currentTime+w);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+w+d);o.connect(g).connect(ac.destination);o.start(ac.currentTime+w);o.stop(ac.currentTime+w+d)}catch(e){}}
+const GOODW=['Great! 🎉','Well done! ⭐','Awesome! 🚀','Super! 💪','Fantastic! ✨','Brilliant! 🌟','Yes! 👏'],BADW=['Try again! 💪','Oops! 🙈','Nearly! 🤏','Keep going! 🍀'];let mT,mLast=0;
+function mascot(ok){const n=Date.now();if(n-mLast<600)return;mLast=n;const m=$('#mascot');if(!m)return;$('#mb').textContent=pick(ok?GOODW:BADW);$('#mf').textContent=ok?pick(['🦉','🦉','🥳']):'🦉';m.className='mascot show '+(ok?'good':'bad');clearTimeout(mT);mT=setTimeout(()=>m.classList.remove('show'),1300)}
+const sGood=()=>{mascot(1);[660,880,1100].forEach((f,i)=>tone(f,.14,.1,i*.08,'sine'))},sBad=()=>{mascot(0);tone(180,.3,.08,0,'sawtooth')},sClick=()=>tone(520,.06,.07),sWin=()=>[523,659,784,1046,784,1046,1318].forEach((f,i)=>tone(f,.2,.1,i*.13));
+let VOX=null;function pickVoice(){try{const v=speechSynthesis.getVoices();VOX=v.find(x=>/en-GB/i.test(x.lang)&&/female|Google UK English Female|Serena|Kate|Libby|Sonia/i.test(x.name))||v.find(x=>/en-GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}catch(e){}}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
+function say(t,force){try{if(!t||(!VOICE&&!force))return;const u=new SpeechSynthesisUtterance(String(t).replace(/<[^>]+>/g,'').replace(/[’]/g,"'").replace(/[“”]/g,'').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}✅❌]/gu,''));u.lang='en-GB';if(VOX)u.voice=VOX;u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function toast(h,ms=1500){const t=$('#toast');t.innerHTML=h;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms)}
+function modal(h){$('#mbox').innerHTML=h;$('#modal').classList.add('show')}
+function closeModal(){$('#modal').classList.remove('show')}
+function stars(n){return '⭐'.repeat(n)+'☆'.repeat(3-n)}
+function endScreen(title,lines,st,again){sWin();rain();modal(`<div class="big">🏆</div><h2>${title}</h2><div style="font-size:46px;letter-spacing:4px">${stars(st)}</div>${lines.filter(Boolean).map(l=>`<p>${l}</p>`).join('')}<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px"><button class="btn" id="again">Play again 🔄</button>${D.theory?'<button class="btn sec" id="relearn">📖 Learn</button>':''}<a class="btn sec" href="index.html" style="text-decoration:none">🏠 Menu</a></div>`);$('#again').onclick=()=>{closeModal();again()};const rl=$('#relearn');if(rl)rl.onclick=()=>{closeModal();openTheory()}}
+const cv=$('#fx'),cx=cv.getContext('2d');let parts=[],run=false;function rs(){cv.width=innerWidth;cv.height=innerHeight}addEventListener('resize',rs);rs();
+const COL=['#ffcf3f','#ff5c8a','#22b35b','#38bdf8','#a78bfa','#fff'];
+function burst(el,n=30){const r=el.getBoundingClientRect?el.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0,height:0};for(let i=0;i<n;i++)parts.push({x:r.left+r.width/2,y:r.top+r.height/2,vx:(Math.random()-.5)*10,vy:(Math.random()-.9)*9,s:4+Math.random()*6,c:COL[i%6],l:60});loop()}
+function rain(){for(let i=0;i<170;i++)parts.push({x:Math.random()*cv.width,y:-Math.random()*cv.height*.6,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,s:5+Math.random()*7,c:COL[i%6],l:240});loop()}
+function loop(){if(run)return;run=true;(function f(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.l-->0);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.17;cx.fillStyle=p.c;cx.fillRect(p.x,p.y,p.s,p.s*.6)});if(parts.length)requestAnimationFrame(f);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}})()}
+function qOpts(it){return shuffle([it.a,...it.w])}
+function qText(it){return it.q.replace('___','<span class="blank">___</span>')}
+function qSay(it){return it.say||(it.q.includes('___')?it.q.replace('___',it.a):it.q+' '+it.a)}
+// ---------- tools ----------
+function setTool(){$('#tSnd').classList.toggle('off',!SND);$('#tSnd').textContent=SND?'🔊':'🔇';$('#tVoice').classList.toggle('off',!VOICE)}
+$('#tSnd').onclick=()=>{SND=!SND;try{localStorage.setItem('snd',SND?'1':'0')}catch(e){}setTool();if(SND)sClick()};
+$('#tVoice').onclick=()=>{VOICE=!VOICE;try{localStorage.setItem('voice',VOICE?'1':'0')}catch(e){}setTool();if(VOICE)say('Voice on')};
+$('#tFs').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+setTool();
+// ---------- theory ----------
+const hl=s=>String(s).replace(/\{([^}]+)\}/g,'<mark>$1</mark>');
+const plain=s=>String(s).replace(/[{}]/g,'').replace(/<[^>]+>/g,'');
+function openTheory(tab){const T=D.theory;if(!T)return;const tabs=[];if(T.vocab&&T.vocab.length)tabs.push(['v','🖼️ Words']);if(T.grammar&&T.grammar.length)tabs.push(['g','🧩 Grammar']);if(T.check&&T.check.length)tabs.push(['c','✅ Check']);
+ let h=`<div class="thhead"><h2>📖 Learn first!<small>${T.title||META.sub}</small></h2><div style="display:flex;gap:8px"><button class="tb" id="caT" style="background:rgba(0,0,0,.2)">🗨️ Català: ON</button><button class="btn" id="thPlay">▶ Play</button></div></div><div class="ttabs">${tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join('')}</div>`;
+ if(T.vocab)h+=`<div class="tsec" id="ts-v"><p style="color:#fff;font-weight:600;margin-bottom:10px">👆 Tap a card to hear the word.</p><div class="vgrid">${T.vocab.map((v,i)=>`<button class="vc" data-i="${i}"><div class="vi">${picHTML(v.img)}</div><div class="vw">${v.w}</div><div class="vca ca-x">${v.ca||''}</div></button>`).join('')}</div></div>`;
+ if(T.grammar)h+=`<div class="tsec" id="ts-g"><div class="gcards">${T.grammar.map(g=>`<div class="gc"><h3>${g.ic||'🧩'} ${g.t}</h3>${g.ca?`<div class="ca ca-x">${g.ca}</div>`:''}${g.table?`<table class="gtable">${g.table.map((r,ri)=>`<tr>${r.map(c=>ri===0&&g.thead?`<th>${c}</th>`:`<td>${hl(c)}</td>`).join('')}</tr>`).join('')}</table>`:''}${g.ex?`<div class="exs">${g.ex.map(e=>{const [en,tr]=Array.isArray(e)?e:[e,''];return `<button class="ex" data-s="${plain(en).replace(/"/g,'&quot;')}"><span class="spk">🔊</span><span>${hl(en)}${tr?`<span class="tr ca-x">${tr}</span>`:''}</span></button>`}).join('')}</div>`:''}</div>`).join('')}</div></div>`;
+ if(T.check)h+=`<div class="tsec" id="ts-c"><div class="qc" id="qc"></div></div>`;
+ h+=`<div class="thfoot"><button class="btn" id="thPlay2" style="font-size:23px;padding:14px 34px">▶ I’m ready! Let’s play!</button></div>`;
+ $('#th').innerHTML=h;$('#theory').classList.add('show');$('#intro').classList.remove('show');$('#theory').scrollTop=0;
+ const sel=t=>{$$('.ttabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));$$('.tsec').forEach(s=>s.classList.toggle('on',s.id==='ts-'+t));if(t==='c')check(0,[])};
+ $$('.ttabs button').forEach(b=>b.onclick=()=>{sClick();sel(b.dataset.t)});sel(tab||tabs[0][0]);
+ $$('.vc').forEach(b=>b.onclick=()=>{$$('.vc').forEach(x=>x.classList.remove('play'));b.classList.add('play');say(T.vocab[+b.dataset.i].say||T.vocab[+b.dataset.i].w,1)});
+ $$('.ex').forEach(b=>b.onclick=()=>say(b.dataset.s,1));
+ let caOn=true;$('#caT').onclick=()=>{caOn=!caOn;$('#caT').textContent='🗨️ Català: '+(caOn?'ON':'OFF');$$('.ca-x').forEach(e=>e.style.display=caOn?'':'none')};
+ $('#thPlay').onclick=$('#thPlay2').onclick=()=>{$('#theory').classList.remove('show');startGame()};
+}
+function check(i,res){const T=D.theory,C=T.check;const box=$('#qc');if(i>=C.length){const ok=res.filter(Boolean).length;box.innerHTML=`<div class="qcp">${res.map(r=>`<i class="${r?'ok':'no'}"></i>`).join('')}</div><div style="font-size:60px">${ok===C.length?'🌟':ok>=C.length/2?'👍':'💪'}</div><h3>${ok}/${C.length} correct!</h3><p>${ok===C.length?'Perfect! You are ready!':'Look at the grammar again or try the game!'}</p><br><button class="btn sec" id="qcr">🔄 Try again</button>`;$('#qcr').onclick=()=>check(0,[]);if(ok===C.length){sWin();burst(box,40)}return}
+ const it=C[i];box.innerHTML=`<div class="qcp">${C.map((_,k)=>`<i class="${k<i?(res[k]?'ok':'no'):''}"></i>`).join('')}</div><p style="color:#6b6790;font-weight:600">Question ${i+1}/${C.length}</p>${it.img!=null?`<div style="width:130px;aspect-ratio:1;border-radius:16px;overflow:hidden;margin:6px auto">${picHTML(it.img)}</div>`:''}<h3>${qText(it)}</h3><div class="opts">${qOpts(it).map(o=>`<button class="opt">${o}</button>`).join('')}</div>`;
+ $$('#qc .opt').forEach(b=>b.onclick=()=>{if(b.disabled)return;$$('#qc .opt').forEach(x=>x.disabled=true);const ok=b.textContent===it.a;b.classList.add(ok?'ok':'no');if(!ok)$$('#qc .opt').find(x=>x.textContent===it.a).classList.add('ok');ok?sGood():sBad();say(qSay(it));res.push(ok);setTimeout(()=>check(i+1,res),1500)})}
+function openIntro(){$('#introbox').innerHTML=`<div class="ie">${META.emoji}</div><h2>${META.title}</h2><div class="is">${META.sub}</div><div class="how">${HOW.map(h=>`<div><b>${h[0]}</b><span>${h[1]}${h[2]?`<small>${h[2]}</small>`:''}</span></div>`).join('')}</div><div class="ibtns">${D.theory?'<button class="btn learnb" id="iLearn">📖 Learn first</button>':''}<button class="btn" id="iPlay">▶ Let’s play!</button></div>`;
+ $('#intro').classList.add('show');$('#iPlay').onclick=()=>{$('#intro').classList.remove('show');startGame()};const l=$('#iLearn');if(l)l.onclick=()=>openTheory()}
+$('#tLearn').onclick=()=>openTheory();$('#tHow').onclick=()=>openIntro();
+if(!D.theory)$('#tLearn').style.display='none';
+let __started=false;function startGame(){try{if(ac&&ac.state==='suspended')ac.resume()}catch(e){}if(__started)return;__started=true;__GAME__()}
+function __GAME__(){
+const J=D.jep;const TE=[{n:'Team A',e:'🔵'},{n:'Team B',e:'🔴'},{n:'Team C',e:'🟢'},{n:'Team D',e:'🟡'}];let teams,cur,left;
+function drawTeams(){$('#teams').innerHTML=teams.map((t,k)=>`<div class="tm ${k===cur?'cur':''}"><span>${t.e} ${t.n}</span><b>${t.s}</b></div>`).join('')}
+function draw(){const C=J.cats.length;$('#jb').style.gridTemplateColumns=`repeat(${C},1fr)`;
+ let h=J.cats.map(c=>`<div class="ch"><span class="i">${c.ic}</span>${c.name}</div>`).join('');
+ for(let r=0;r<5;r++)for(let c=0;c<C;c++)h+=`<button class="cell" data-c="${c}" data-r="${r}">${(r+1)*100}</button>`;
+ $('#jb').innerHTML=h;$$('.cell').forEach(b=>b.onclick=()=>open(b));left=5*C;drawTeams()}
+function open(b){if(b.classList.contains('used'))return;const c=J.cats[+b.dataset.c],r=+b.dataset.r,it=c.items[r]||pick(c.items),val=(r+1)*100,t=teams[cur];sClick();
+ modal(`<div><span class="val">${c.ic} ${c.name} · ${val}</span></div><p style="font-weight:700">${t.e} ${t.n}</p>${it.img!=null?`<div class="im">${picHTML(it.img)}</div>`:''}<h2>${qText(it)}</h2><div class="opts">${qOpts(it).map(o=>`<button class="opt">${o}</button>`).join('')}</div><p id="res"></p>`);
+ if(it.listen)say(it.q);
+ $$('.mbox .opt').forEach(o=>o.onclick=async()=>{if(o.disabled)return;$$('.mbox .opt').forEach(x=>x.disabled=true);const ok=o.textContent===it.a;
+  if(ok){o.classList.add('ok');sGood();t.s+=val;burst(o);$('#res').innerHTML=`✅ +${val} points!`}else{o.classList.add('no');sBad();$$('.mbox .opt').find(x=>x.textContent===it.a).classList.add('ok');$('#res').innerHTML='❌ No points this time!'}
+  say(qSay(it));b.classList.add('used',ok?'ok':'no');left--;await wait(2300);closeModal();cur=(cur+1)%teams.length;drawTeams();if(!left)finish()})}
+function finish(){const r=[...teams].sort((a,b)=>b.s-a.s);endScreen(teams.length>1?`${r[0].e} ${r[0].n} wins!`:'Game over!',r.map((x,i)=>`${['🥇','🥈','🥉','4️⃣'][i]} ${x.e} ${x.n} — ${x.s}`),3,setup)}
+function setup(){let n=2;modal(`<div class="setup"><div class="big">🎤</div><h2>${J.title||'Quiz Show'}</h2><p>Teams take turns choosing a question.</p><p><b>How many teams?</b></p><div class="row">${[1,2,3,4].map(k=>`<button data-n="${k}" class="${k===2?'on':''}">${k}</button>`).join('')}</div><button class="btn" id="go">Start ▶</button></div>`);
+ $$('.setup .row button').forEach(b=>b.onclick=()=>{$$('.setup .row button').forEach(x=>x.classList.remove('on'));b.classList.add('on');n=+b.dataset.n});
+ $('#go').onclick=()=>{teams=TE.slice(0,n).map(t=>({...t,s:0}));cur=0;closeModal();draw()}}
+teams=TE.slice(0,2).map(t=>({...t,s:0}));cur=0;draw();setup();
+;window.__ev=s=>eval(s);
+}
+openIntro();
+</script></body></html>
