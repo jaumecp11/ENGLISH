@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rànquing · English FEDAC</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Fredoka,system-ui,sans-serif;color:#26214a;min-height:100vh;padding:16px 16px 90px;background:radial-gradient(circle at 12% 18%,rgba(255,255,255,.16) 0 70px,transparent 71px),radial-gradient(circle at 88% 78%,rgba(255,255,255,.12) 0 110px,transparent 111px),linear-gradient(135deg,#6c4cf5,#ff5c8a) fixed #6c4cf5}
+.wrap{max-width:1100px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+h1{color:#fff;font-size:clamp(32px,5vw,52px);text-shadow:0 4px 0 rgba(0,0,0,.2)}
+.back{color:#fff;text-decoration:none;font-weight:700;background:rgba(0,0,0,.2);padding:10px 18px;border-radius:999px;font-size:18px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.seg{display:flex;background:rgba(255,255,255,.92);border-radius:999px;padding:5px;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.seg button{font:700 18px Fredoka,sans-serif;border:0;background:transparent;padding:10px 18px;border-radius:999px;cursor:pointer;color:#26214a}
+.seg button.on{background:#6c4cf5;color:#fff}
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:14px;align-items:end;margin:10px 0 20px}
+.pd{background:#fff;border-radius:24px 24px 14px 14px;text-align:center;padding:16px 10px;box-shadow:0 8px 0 rgba(0,0,0,.18);position:relative}
+.pd .av{font-size:64px;line-height:1}
+.pd .nm{font-weight:700;font-size:22px;margin-top:6px}
+.pd .st{font-size:20px;font-weight:700;color:#b7791f}
+.pd .md{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:44px}
+.pd.p1{padding-top:30px;min-height:240px;background:linear-gradient(#fff7d6,#fff)}.pd.p2{min-height:190px}.pd.p3{min-height:160px}
+.pd.me{outline:5px solid #ffcf3f}
+.list{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:54px 50px 1fr auto auto;gap:12px;align-items:center;background:#fff;border-radius:18px;padding:10px 16px;box-shadow:0 5px 0 rgba(0,0,0,.15);font-size:20px;font-weight:600}
+.row .n{font-weight:700;font-size:24px;color:#8a86a8;text-align:center}
+.row .av{font-size:36px}
+.row .gp{font-size:15px;color:#8a86a8;display:block}
+.row .s{font-weight:700;color:#b7791f;white-space:nowrap}
+.row .g{color:#6b6790;font-size:16px;white-space:nowrap}
+.row.me{outline:4px solid #ffcf3f;background:#fffaf0}
+.msg{background:#fff;border-radius:24px;padding:30px;text-align:center;box-shadow:0 8px 0 rgba(0,0,0,.18);font-size:20px}
+.msg .big{font-size:70px}
+.btn{font:700 22px Fredoka,sans-serif;border:0;border-radius:16px;padding:14px 26px;background:#ffcf3f;color:#3a2a00;box-shadow:0 5px 0 rgba(0,0,0,.25);cursor:pointer;margin-top:14px}
+.mine{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.gm{background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 5px 0 rgba(0,0,0,.15);display:flex;justify-content:space-between;align-items:center;gap:8px;text-decoration:none;color:inherit}
+.gm b{font-size:18px}.gm small{display:block;color:#8a86a8}.gm .s{font-size:22px;white-space:nowrap}
+.sum{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sum div{background:#fff;border-radius:18px;padding:14px 20px;font-weight:700;font-size:22px;box-shadow:0 5px 0 rgba(0,0,0,.15)}
+.sum div small{display:block;font-size:14px;color:#8a86a8}
+h2{color:#fff;font-size:26px;margin:18px 0 10px;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+@media (max-width:640px){.podium{gap:6px}.pd .av{font-size:44px}.pd .nm{font-size:16px}.row{grid-template-columns:36px 40px 1fr auto;font-size:17px}.row .g{display:none}}
+</style></head><body><div class="wrap">
+<div class="top"><h1>🏆 Rànquing</h1><a class="back" href="index.html">🏠 Menu</a></div>
+<div class="bar"><div class="seg" id="tab"><button data-v="rank" class="on">🏆 Classe</button><button data-v="me">⭐ Els meus resultats</button></div>
+<div class="seg" id="course"></div><div class="seg" id="per"><button data-v="7" class="on">Aquesta setmana</button><button data-v="30">Aquest mes</button><button data-v="0">Sempre</button></div>
+<div class="seg" id="grp"><button data-v="" class="on">Tot el curs</button><button data-v="mine">El meu grup</button></div></div>
+<div id="out"></div>
+</div>
+<script src="efauth.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const C=['3r','4t','5è','6è'];let tab=location.hash==='#me'?'me':'rank',course=null,days=7,grp='';
+$('#course').innerHTML=C.map(c=>`<button data-v="${c}">${c}</button>`).join('');
+function seg(id,cb){$$(id+' button').forEach(b=>b.onclick=()=>{$$(id+' button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cb(b.dataset.v);draw()})}
+seg('#tab',v=>tab=v);seg('#course',v=>course=v);seg('#per',v=>days=+v);seg('#grp',v=>grp=v);
+function setOn(id,v){$$(id+' button').forEach(b=>b.classList.toggle('on',b.dataset.v===v))}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function draw(){await EF.ready;setOn('#tab',tab);
+ ['#course','#per','#grp'].forEach(i=>$(i).style.display=tab==='rank'?'':'none');
+ if(!EF.sb){$('#out').innerHTML=`<div class="msg"><div class="big">📡</div>No hi ha connexió a internet.</div>`;return}
+ if(!EF.user){$('#out').innerHTML=`<div class="msg"><div class="big">🔑</div><p>Inicia sessió per veure el rànquing de la teva classe.</p><button class="btn" onclick="EF.login()">Inicia sessió amb Google</button></div>`;return}
+ if(!EF.profile){$('#out').innerHTML=`<div class="msg"><div class="big">👤</div><p>Completa el teu perfil primer.</p><button class="btn" onclick="EF.profileBox()">Completa el perfil</button></div>`;return}
+ if(!course){course=EF.profile.course}setOn('#course',course);
+ if(tab==='me')return mine();
+ $('#out').innerHTML='<div class="msg">⏳ Carregant…</div>';
+ const {data,error}=await EF.sb.rpc('leaderboard',{p_course:course,p_days:days,p_grp:grp==='mine'?EF.profile.grp:null});
+ if(error){$('#out').innerHTML=`<div class="msg">⚠️ Error carregant el rànquing.</div>`;return}
+ if(!data.length){$('#out').innerHTML=`<div class="msg"><div class="big">🌱</div><p>Encara no hi ha resultats aquí. Sigues el primer o la primera!</p><a class="btn" style="display:inline-block;text-decoration:none" href="index.html#${course}">🎮 Juga ara</a></div>`;return}
+ const top=data.slice(0,3),order=[1,0,2];
+ let h=`<div class="podium">${order.map(i=>top[i]?`<div class="pd p${i+1} ${top[i].is_me?'me':''}"><div class="md">${['🥇','🥈','🥉'][i]}</div><div class="av">${top[i].avatar}</div><div class="nm">${esc(top[i].nickname)}</div><div class="st">⭐ ${top[i].stars}</div><small>${top[i].games} jocs · ${course} ${top[i].grp}</small></div>`:'<div></div>').join('')}</div><div class="list">`;
+ h+=data.slice(3).map((r,i)=>`<div class="row ${r.is_me?'me':''}"><span class="n">${i+4}</span><span class="av">${r.avatar}</span><span>${esc(r.nickname)}<span class="gp">${course} ${r.grp}</span></span><span class="s">⭐ ${r.stars}</span><span class="g">🎮 ${r.games} jocs · ${r.plays} partides</span></div>`).join('');
+ h+='</div><p style="color:#fff;text-align:center;margin-top:16px;font-weight:600">⭐ = suma de la millor puntuació (fins a 3 estrelles) de cada joc. Juga a tots els jocs per pujar!</p>';
+ $('#out').innerHTML=h}
+async function mine(){$('#out').innerHTML='<div class="msg">⏳ Carregant…</div>';
+ const {data}=await EF.sb.from('scores').select('game,title,course,unit,stars,points,created_at').eq('user_id',EF.user.id).order('created_at',{ascending:false}).limit(1000);
+ const best={};(data||[]).forEach(r=>{const b=best[r.game];if(!b||r.stars>b.stars||(r.stars===b.stars&&r.points>b.points))best[r.game]={...r,n:(b?b.n:0)+1};else b.n++});
+ const L=Object.values(best),tot=L.reduce((a,b)=>a+b.stars,0);
+ let h=`<div class="sum"><div>${EF.profile.avatar} ${esc(EF.profile.nickname)}<small>${EF.profile.course} ${EF.profile.grp}</small></div><div>⭐ ${tot}<small>estrelles totals</small></div><div>🎮 ${L.length}<small>jocs diferents</small></div><div>🔁 ${(data||[]).length}<small>partides</small></div></div>`;
+ if(!L.length)h+=`<div class="msg"><div class="big">🎮</div>Encara no has jugat cap joc amb la sessió iniciada.</div>`;
+ else{const by={};L.forEach(r=>(by[r.course+' · '+r.unit]=by[r.course+' · '+r.unit]||[]).push(r));
+  for(const k of Object.keys(by).sort()){h+=`<h2>📚 ${k}</h2><div class="mine">${by[k].map(r=>`<a class="gm" href="${r.game}"><span><b>${esc(r.title||r.game)}</b><small>${r.n} partida${r.n>1?'es':''} · ${new Date(r.created_at).toLocaleDateString('ca')}</small></span><span class="s">${'⭐'.repeat(r.stars)}${'☆'.repeat(3-r.stars)}</span></a>`).join('')}</div>`}}
+ $('#out').innerHTML=h}
+EF.onChange(draw);draw();
+</script></body></html>
