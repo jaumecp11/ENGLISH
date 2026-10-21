@@ -309,7 +309,7 @@ const G=D.gym,TOPS=G.topics,ND=G.nd||2,N=10;
 const MODES=[{id:'choose',ic:'🔘',n:'Choose',ca:'Tria la paraula',c:'#2563eb'},{id:'type',ic:'⌨️',n:'Complete',ca:'Escriu el que falta',c:'#db2777'},{id:'full',ic:'✍️',n:'Whole sentence',ca:'Escriu la frase sencera',c:'#16a34a'},{id:'trans',ic:'🔄',n:'Transform',ca:'Passa a negativa / pregunta',c:'#ea580c'},{id:'mix',ic:'🎲',n:'Mix',ca:'Una mica de tot',c:'#7c3aed'}];
 const TGT={a:['✅','Affirmative','afirmativa'],n:['❌','Negative','negativa'],q:['❓','Question','pregunta']};
 const TCOL=['#ff5c8a','#38bdf8','#22b35b','#ffb020','#a78bfa','#ff7a3d','#14b8a6','#6366f1','#ec4899','#0ea5e9'];
-let SEL=new Set([TOPS[0].id]),MODE='choose',HELP=G.help||'keys',Q=[],ri=0,pts=0,res=[],streak=0,best=0,cur=null,tries=0,lock=false;
+let SEL=new Set([(()=>{const h=decodeURIComponent(location.hash.slice(1));return TOPS.some(t=>t.id===h)?h:TOPS[0].id})()]),MODE='choose',HELP=G.help||'keys',Q=[],ri=0,pts=0,res=[],streak=0,best=0,cur=null,tries=0,lock=false;
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 function fill(f,skip=-1){return f.t.replace(/\{(\d+)\}/g,(m,i)=>+i===skip?'___':f.b[+i].a)}
 // ---------- answer checking (contractions accepted) ----------
