@@ -96,12 +96,43 @@ a{color:inherit}
 .empty{color:#6b6790;font-size:15px;padding:10px 4px}
 .hide{display:none!important}
 button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+
+.ico{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:1.5em;height:1.5em;vertical-align:middle}
+.ico img{width:100%;height:100%;object-fit:contain}
+.rank .ico{width:30px;height:30px}.stp .ico{width:24px;height:24px}.ghost .ico,.thb .ico{width:30px;height:30px}.modes .ico{width:26px;height:26px}
+.ti img{width:84%;height:84%;object-fit:contain;filter:drop-shadow(0 4px 4px rgba(0,0,0,.12))}
+.ic.im{background:none!important;width:66px;height:66px}
+.ic.im img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.12))}
+.row .ic.im{width:50px;height:50px}
+/* theory */
+.thb{background:#fff;color:var(--acc);border:0;font-weight:700;font-size:17px;padding:9px 18px;border-radius:999px;cursor:pointer;min-height:44px;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.tov{position:fixed;inset:0;z-index:60;display:none;overflow:auto;padding:20px 16px 40px;background:var(--bg)}
+.tov.on{display:block}
+.tin{max-width:1080px;margin:0 auto}
+.thd{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#fff;margin-bottom:16px}
+.thd h2{font-size:clamp(26px,4.5vw,40px);text-shadow:0 3px 0 rgba(0,0,0,.15)}
+.thd h2 small{display:block;font-size:.45em;opacity:.95}
+.tgr{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));grid-auto-flow:row dense;gap:16px}
+.tc{background:#fff;border-radius:24px;padding:18px;box-shadow:0 7px 0 rgba(0,0,0,.15);display:flex;flex-direction:column;gap:10px}
+.tc.w{grid-column:1/-1}
+.tc h3{font-size:clamp(20px,2.6vw,24px)}
+.tca{background:#fff7d6;border-left:5px solid #ffcf3f;border-radius:12px;padding:8px 12px;font-size:16px}
+.tc table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:16px}
+.tc th{text-align:left;font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;padding:2px 8px}
+.tc td{background:#f6f4fd;padding:8px 10px;font-weight:600}
+.tc td:first-child{border-radius:10px 0 0 10px}.tc td:last-child{border-radius:0 10px 10px 0}
+.hl{background:#ffd43b;border-radius:6px;padding:0 4px}
+.tex{display:flex;flex-direction:column;gap:6px}
+.tex button{display:flex;gap:10px;align-items:flex-start;text-align:left;border:0;background:#f6f4fd;border-radius:12px;padding:8px 12px;cursor:pointer;font-size:17px;font-weight:600;color:var(--ink)}
+.tex button:hover{background:#ece8fb}
+.tex small{display:block;font-size:13px;color:var(--mut);font-weight:500}
+@media (max-width:600px){.tc table{font-size:14px}.tc td{padding:6px}}
 @media (max-width:600px){.logo{font-size:26px}.tile{padding:22px}.tile h2{font-size:32px}.courses button{padding:8px 18px;font-size:20px}}
 </style></head><body>
 <div class="wrap">
  <header class="hdr">
   <button class="logo" id="logo"><span>🎮</span><span>English Games</span></button>
-  <div class="hr" id="hr"><a class="rank" href="leaderboard.html">🏆 Rànquing</a><span class="stp" id="stp">⭐ <b id="stN">0</b></span><button class="efchip" id="efchip"></button></div>
+  <div class="hr" id="hr"><a class="rank" href="leaderboard.html"><i class="ico" data-ico="rank">🏆</i> Rànquing</a><span class="stp" id="stp"><i class="ico" data-ico="star">⭐</i> <b id="stN">0</b></span><button class="efchip" id="efchip"></button></div>
  </header>
  <div class="hero">
   <div><p class="hi" id="hi">Hola! 👋</p><h1 id="ttl">Què vols practicar avui?</h1></div>
@@ -109,24 +140,62 @@ button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}
  </div>
  <section id="vHome">
   <div class="tiles">
-   <button class="tile" data-go="vocab"><span class="tt"><span class="ti" style="background:#e7f5ff">📖</span><span class="ar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+   <button class="tile" data-go="vocab"><span class="tt"><span class="ti" style="background:#e7f5ff" data-ico="vocab">📖</span><span class="ar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
     <h2>Vocabulary</h2><p>Les paraules de cada unitat: sopes de lletres, memory, endevinalles…</p>
     <span class="chips"><span>🎮 <b data-k="v.count"></b> jocs</span><span>📚 <b data-k="v.units"></b> unitats</span><span class="y lg">⭐ <b data-k="v.stars"></b></span></span>
     <span class="bar lg"><i data-w="v.pct"></i></span><span class="pl lg"><b data-k="v.played"></b> de <b data-k="v.count"></b> jocs jugats</span></button>
-   <button class="tile" data-go="grammar"><span class="tt"><span class="ti" style="background:#f8f0fc">✏️</span><span class="ar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+   <button class="tile" data-go="grammar"><span class="tt"><span class="ti" style="background:#f8f0fc" data-ico="grammar">✏️</span><span class="ar"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
     <h2>Grammar</h2><p id="gDesc">Estructures i verbs de cada unitat</p>
     <span class="chips"><span>🎮 <b data-k="g.count"></b> jocs</span><span>📚 <b data-k="g.units"></b> unitats</span><span class="y lg">⭐ <b data-k="g.stars"></b></span></span>
     <span class="bar lg"><i data-w="g.pct"></i></span><span class="pl lg"><b data-k="g.played"></b> de <b data-k="g.count"></b> jocs jugats</span></button>
   </div>
-  <div class="allbtn"><button class="ghost" data-go="all">🧩 Veure-ho tot junt</button></div>
+  <div class="allbtn"><button class="ghost" data-go="all"><i class="ico" data-ico="all">🧩</i> Veure-ho tot junt</button></div>
  </section>
  <section id="vSub" class="hide">
-  <div class="bar2"><button class="back" data-go="home">← Inici</button><div class="modes" id="modes"><button data-go="vocab">📖 Vocabulary</button><button data-go="grammar">✏️ Grammar</button><button data-go="all">🧩 Tot junt</button></div></div>
+  <div class="bar2"><button class="back" data-go="home">← Inici</button><div class="modes" id="modes"><button data-go="vocab"><i class="ico" data-ico="vocab">📖</i> Vocabulary</button><button data-go="grammar"><i class="ico" data-ico="grammar">✏️</i> Grammar</button><button data-go="all"><i class="ico" data-ico="all">🧩</i> Tot junt</button></div><button class="thb" id="thBtn"><i class="ico" data-ico="learn">📖</i> Teoria de grammar</button></div>
   <nav class="unav" id="unav" aria-label="Unitats"></nav>
   <div class="units" id="units"></div>
  </section>
 </div>
+<div class="tov" id="tov"><div class="tin"><div class="thd"><h2 id="thT"></h2><button class="ghost" id="thX">✕ Tanca</button></div><div class="tgr" id="tgr"></div></div></div>
+<script src="icons.js"></script>
 <script>
+const TH_H=['Who? · Qui?','✅ Affirmative','❌ Negative','❓ Question'];
+const TB={
+ be:(ex)=>({ic:'🟦',t:'Verb to be: am · is · are',ca:'Per dir com és, com està o on és algú.',table:[TH_H,['I','I {am}','I {am not}','{Am} I…?'],['He / She / It','He {is}','He {is not}','{Is} he…?'],['You / We / They','You {are}','You {are not}','{Are} you…?']],ex}),
+ have:(ex)=>({ic:'🎒',t:'Have got · has got',ca:'Per dir què <b>té</b> algú. He / She / It → <b>has got</b>.',table:[TH_H,['I / You / We / They','I {have got}','I {have not got}','{Have} you {got}…?'],['He / She / It','She {has got}','She {has not got}','{Has} she {got}…?']],ex}),
+ ps:(ex,they)=>({ic:'🔁',t:'Present simple',ca:'El que fem <b>sempre</b> o <b>cada dia</b>.'+(they?'':' He / She / It → verb + <b>s</b>.'),table:they?[TH_H,['I / You / We / They','They {swim}','They {do not fly}','{Do} they {swim}?']]:[TH_H,['I / You / We / They','I {play}','I {do not play}','{Do} you {play}?'],['He / She / It','He {plays}','He {does not play}','{Does} he {play}?']],ex}),
+ pc:(ex)=>({ic:'📸',t:'Present continuous',ca:'El que passa <b>ara mateix</b>: am / is / are + verb<b>-ing</b>.',table:[TH_H,['I','I {am playing}','I {am not playing}','{Am} I {playing}?'],['He / She / It','She {is playing}','She {is not playing}','{Is} she {playing}?'],['You / We / They','They {are playing}','They {are not playing}','{Are} they {playing}?']],ex}),
+ sc:{ic:'⚖️',t:'Simple or continuous?',ca:'<b>Every day, always, on Mondays</b> → present simple. <b>Now, at the moment</b> → present continuous.',table:[['🔁 Every day','📸 Now'],['I {play} tennis on Mondays.','I {am playing} tennis now.'],['She {walks} to school.','She {is walking} to school now.']]},
+ cmp:{ic:'⚖️',t:'Comparatives: -er than · more … than',ca:'Per comparar <b>dues</b> coses.',table:[['Adjective','Comparative','Rule'],['fast · old · tall','{faster} · {older} · {taller}','+ er'],['big · hot','{bigger} · {hotter}','double the letter'],['noisy · heavy','{noisier} · {heavier}','y → ier'],['expensive · dangerous','{more expensive} · {more dangerous}','more + adjective'],['good · bad','{better} · {worse}','irregular!']],ex:[['The cheetah is {faster than} the horse.','El guepard és més ràpid que el cavall.'],['The city is {more crowded than} the village.','La ciutat és més plena de gent que el poble.']]},
+ sup:{ic:'🏆',t:'Superlatives: the -est · the most …',ca:'Per dir quin és el <b>més</b> de tres o més.',table:[['Adjective','Superlative'],['fast · tall','{the fastest} · {the tallest}'],['big','{the biggest}'],['heavy','{the heaviest}'],['expensive','{the most expensive}'],['good · bad','{the best} · {the worst}']],ex:[['The elephant is {the biggest} animal.','L’elefant és l’animal més gran.'],['Granny Rose is {the oldest} in the family.','La Granny Rose és la més gran de la família.']]},
+};
+const THEORY={
+'3r':[TB.be([['The panda {is} black and white.','El panda és blanc i negre.'],['Pandas {are} big.','Els pandes són grans.'],['The tortoise {is not} fast.','La tortuga no és ràpida.']]),
+ TB.have([['The tiger {has got} stripes.','El tigre té ratlles.'],['Parrots {have got} colourful feathers.','Els lloros tenen plomes de colors.']]),
+ TB.ps([['Seals {swim} in the sea.','Les foques neden al mar.'],['Tortoises {do not run}.','Les tortugues no corren.']],true),
+ {ic:'❤️',t:'I like … best',ca:'Per dir què t’agrada <b>més</b> de tot.',ex:[['Which animals do you like {best}?','Quins animals t’agraden més?'],['I like {dolphins} best.','M’agraden més els dofins.']]}],
+'4t':[TB.be([['I {am} tired.','Estic cansat.'],['{Are} you OK? — Yes, I am.','Estàs bé? — Sí.']]),
+ TB.have([['I {have got} a cold.','Estic refredat.'],['She {has got} a headache.','Té mal de cap.']]),
+ {ic:'🤒',t:'What is the matter?',ca:'Per preguntar què li passa a algú.',table:[['Question','Answer'],['What is the matter {with you}?','I {have got} a cold.'],['What is the matter {with him}?','He {has got} a sore throat.'],['What is the matter {with her}?','She {has got} a stomach ache.']]},
+ {ic:'👀',t:'Is or has got?',ca:'<b>is</b> → com és. <b>has got</b> → què té.',table:[['is','has got'],['He {is} tall.','He {has got} short hair.'],['She {is} thin.','She {has got} blue eyes.']]},
+ {ic:'⏰',t:'What time is it?',ca:'Per dir l’hora.',ex:[['It is {eight o’clock}.','Són les vuit.'],['It is {quarter past} eight.','Són les vuit i quart.'],['It is {half past} eight.','Són les vuit i mitja.'],['It is {quarter to} nine.','Són tres quarts de nou.']]},
+ TB.ps([['I {get up} at seven o’clock.','Em llevo a les set.'],['She {has} breakfast at eight.','Esmorza a les vuit.']])],
+'5è':[TB.be([['I {am} good at football.','Sóc bo a futbol.'],['They {are not} at the party.','No són a la festa.']]),
+ TB.have([['She {has got} fair hair.','Té els cabells rossos.'],['{Has} he {got} a ball? — No, he has not.','Té pilota? — No.']]),
+ TB.ps([['He {plays} football on Saturdays.','Juga a futbol els dissabtes.'],['She {does not go} swimming.','No va a nedar.']]),
+ TB.pc([['I {am playing} tennis now.','Ara estic jugant a tennis.'],['{Are} they {dancing}? — Yes, they are.','Estan ballant? — Sí.']]),
+ TB.sc,TB.cmp,TB.sup],
+'6è':[TB.cmp,TB.sup,
+ TB.ps([['She {listens} to music every day.','Escolta música cada dia.'],['{Does} he {use} a computer?','Fa servir un ordinador?']]),
+ TB.pc([['I {am chatting} with my friend now.','Ara estic xatejant amb el meu amic.'],['She {is not listening}.','No està escoltant.']]),
+ {ic:'👤',t:'my → mine',ca:'<b>my</b> + cosa · <b>mine</b> sol, sense cosa.',table:[['+ thing','alone'],['{my} laptop','It is {mine}.'],['{your} phone','It is {yours}.'],['{his} / {her} tablet','It is {his} / {hers}.'],['{our} / {their} computer','It is {ours} / {theirs}.']]},
+ {ic:'🎯',t:'to + verb',ca:'Per dir <b>per a què</b> fem servir una cosa.',ex:[['I use my phone {to call} my friends.','Faig servir el mòbil per trucar als amics.'],['We use a tablet {to watch} videos.','Fem servir una tauleta per mirar vídeos.']]},
+ {ic:'🚉',t:'must · must not',ca:'<b>must</b> = cal fer-ho. <b>must not</b> = està prohibit.',ex:[['You {must} wait here.','Has d’esperar aquí.'],['You {must not} run on the platform.','No pots córrer a l’andana.']]},
+ {ic:'🏴‍☠️',t:'Past simple',ca:'Per parlar del <b>passat</b>. Regulars: + <b>ed</b>. Irregulars: s’aprenen.',table:[TH_H,['Regular','I {played}','I {did not play}','{Did} you {play}?'],['Irregular','I {went}','I {did not go}','{Did} you {go}?']],ex:[['Yesterday we {visited} the beach.','Ahir vam visitar la platja.'],['I {saw} a treasure chest!','Vaig veure un cofre del tresor!']]},
+ {ic:'🔮',t:'Future: will · will not',ca:'Per fer <b>prediccions</b> del futur.',table:[TH_H,['All','I {will be} a doctor.','I {will not be} a pilot.','{Will} you {be} rich?']],ex:[['In the future, robots {will help} us.','En el futur, els robots ens ajudaran.']]}]
+};
+
 const TYPES={ws:['Word Search','#e7f5ff','#1864ab'],train:['Sentence Train','#fff4e6','#b3400a'],mem:['Memory','#fff0f6','#a61e4d'],board:['Board game','#ebfbee','#237032'],arcade:['Arcade','#f3f0ff','#5f3dc4'],mystery:['Mystery picture','#e6fcf5','#066649'],quiz:['Quiz & cards','#fff9db','#8a5a00'],gym:['Grammar Gym','#f8f0fc','#862e9c']};
 const C={
 '3r':{bg:'linear-gradient(135deg,#b8360b,#e8590c)',acc:'#c2410c',u:[
@@ -168,7 +237,8 @@ function games(list){return list.map(t=>({e:t[0],n:t[1],d:t[2],ty:t[3],h:t[4],gl
 function units(){return C[course].u.map((u,k)=>({...u,k,V:games(u.v),G:games(u.g)}))}
 function prog(list){const p=list.filter(g=>g.bs!=null).length;return{p,n:list.length,pct:list.length?Math.round(p/list.length*100):0,st:list.reduce((a,g)=>a+(g.bs||0),0)}}
 function badge(g){if(g.bs!=null)return `<span class="st" aria-label="${g.bs} de 3 estrelles">${'★'.repeat(g.bs)}${'☆'.repeat(3-g.bs)}</span>`;return logged()?'<span class="new">NOU</span>':''}
-function icon(g){const t=TYPES[g.ty];return `<span class="ic${g.gl?' g'+(g.e.length>3?' l':''):''}" style="background:${t[1]};color:${t[2]}">${esc(g.e)}</span>`}
+const GICON={'3-0-all-about-me-wheel.html':'g_wheel','3-1a-animal-word-search.html':'g_aws','3-1c-animal-memory.html':'g_amem','3-1d-whack-an-animal.html':'g_whack','3-1b-animal-sentence-train.html':'g_atrain','3-2a-school-word-search.html':'g_sws','3-2d-mystery-subject.html':'g_msub','3-2c-school-day-board-game.html':'g_sboard','3-2b-school-sentence-train.html':'g_strain','6-0a-compare-it.html':'cmp'};
+function icon(g){const I=window.ICONS||{},k=GICON[g.h]||(g.gl?null:g.ty);if(k&&I[k])return `<span class="ic im"><img src="${I[k]}" alt=""></span>`;const t=TYPES[g.ty];return `<span class="ic${g.gl?' g'+(g.e.length>3?' l':''):''}" style="background:${t[1]};color:${t[2]}">${esc(g.e)}</span>`}
 function tag(g){const t=TYPES[g.ty];return `<span class="tag" style="background:${t[1]};color:${t[2]}">${t[0]}</span>`}
 function card(g){return `<a class="card" href="${g.h}"><span class="ctop">${icon(g)}${badge(g)}</span><b>${esc(g.n)}</b><small>${esc(g.d)}</small>${tag(g)}</a>`}
 function row(g){return `<a class="row" href="${g.h}">${icon(g)}<span class="rt"><b>${esc(g.n)}</b>${tag(g)}</span>${badge(g)}</a>`}
@@ -188,7 +258,7 @@ function render(){
  $('#ttl').textContent={home:'Què vols practicar avui?',vocab:'📖 Vocabulary',grammar:'✏️ Grammar',all:'🧩 Tots els jocs'}[view];
  $('#vHome').classList.toggle('hide',view!=='home');$('#vSub').classList.toggle('hide',view==='home');
  if(view==='home')return;
- $$('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.go===view));
+ $$('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.go===view));$('#thBtn').classList.toggle('hide',view==='vocab');
  let html='',nav=[];
  if(view==='all'){U.forEach(u=>{nav.push(u);html+=`<section class="unit" id="u${u.k}">${uhead(u,u.V.concat(u.G))}<div class="cols">
   <div class="col"><div class="ch" style="color:#1864ab"><span>📖 Vocabulary</span><span style="background:#e7f5ff">${u.V.length}</span></div>${u.V.map(row).join('')||'<span class="empty">En aquesta unitat no hi ha jocs de vocabulary.</span>'}</div>
@@ -198,6 +268,16 @@ function render(){
  $('#unav').innerHTML=nav.map(u=>`<a href="#u${u.k}" data-u="u${u.k}">${u.b} · ${u.t}</a>`).join('');
  $$('#unav a').forEach(a=>a.onclick=e=>{e.preventDefault();document.getElementById(a.dataset.u).scrollIntoView({behavior:'smooth'})});
 }
+const hlT=s=>esc(s).replace(/\{([^}]+)\}/g,'<span class="hl">$1</span>');
+function speak(s){try{const u=new SpeechSynthesisUtterance(s);u.lang='en-GB';u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function openTheory(){const L=THEORY[course]||[];$('#thT').innerHTML='📖 Grammar · '+course+'<small>Tota la gramàtica del curs. Toca una frase per escoltar-la 🔊</small>';
+ $('#tgr').innerHTML=L.map(c=>`<div class="tc${c.table&&c.table[0].length>3?' w':''}"><h3>${c.ic} ${c.t}</h3>${c.ca?`<div class="tca">${c.ca}</div>`:''}${c.table?`<table><tr>${c.table[0].map(h=>`<th>${h}</th>`).join('')}</tr>${c.table.slice(1).map(r=>`<tr>${r.map(x=>`<td>${hlT(x)}</td>`).join('')}</tr>`).join('')}</table>`:''}${c.ex?`<div class="tex">${c.ex.map(e=>`<button data-s="${esc(e[0].replace(/[{}]/g,''))}"><span>🔊</span><span>${hlT(e[0])}${e[1]?`<small>${esc(e[1])}</small>`:''}</span></button>`).join('')}</div>`:''}</div>`).join('');
+ const cs=[...document.querySelectorAll('#tgr .tc:not(.w)')];if(cs.length%2)cs[cs.length-1].classList.add('w');
+ $$('#tgr .tex button').forEach(b=>b.onclick=()=>speak(b.dataset.s));$('#tov').classList.add('on');$('#tov').scrollTop=0}
+$('#thBtn').onclick=openTheory;$('#thX').onclick=()=>$('#tov').classList.remove('on');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#tov').classList.remove('on')});
+function paintIcons(){const I=window.ICONS||{};$$('[data-ico]').forEach(e=>{const s=I[e.dataset.ico];if(s&&!e.querySelector('img'))e.innerHTML=`<img src="${s}" alt="">`})}
+paintIcons();
 function setCourse(c){course=c;ls.set('course',c);history.replaceState(null,'','#'+encodeURIComponent(c));render()}
 function go(v){view=v;ls.set('view',v);render();window.scrollTo({top:0,behavior:'smooth'})}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t){go(t.dataset.go);return}const c=e.target.closest('#tabs button');if(c)setCourse(c.dataset.c)});

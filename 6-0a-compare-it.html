@@ -334,6 +334,7 @@ $('#tHow').onclick=()=>$('#intro').classList.add('show');
 $('#tSnd').onclick=e=>{SND=!SND;e.currentTarget.classList.toggle('off',!SND)};
 $('#tVoice').onclick=e=>{VOICE=!VOICE;e.currentTarget.classList.toggle('off',!VOICE);if(!VOICE)try{speechSynthesis.cancel()}catch(x){}};
 $('#tFs').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+(function(){const h=location.hash.slice(1);if(['c','s','m'].includes(h)){MODE=h;document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x.dataset.v===MODE));syncMode2()}})();
 $('#intro').classList.add('show');build();
 </script>
 <script src="efauth.js"></script>
