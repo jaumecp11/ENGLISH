@@ -47,7 +47,7 @@ EF.login=async()=>{try{await EF.sb.auth.signInWithOAuth({provider:'google',optio
 EF.logout=async()=>{await EF.sb.auth.signOut();EF.user=null;EF.profile=null;EF.best={};closeOv();chip();fire()};
 EF.isTeacher=async()=>{if(!EF.user)return false;const {data}=await EF.sb.rpc('is_teacher');return !!data};
 
-function loginBox(reason){overlay(`<div style="font-size:64px">🎮</div><h2>English FEDAC</h2><p>${reason||'Inicia sessió per guardar els teus punts i sortir al rànquing!'}</p><button class="efgo g" id="efG">${G} Inicia sessió amb Google</button><button class="efsm" id="efNo">Ara no, només vull jugar</button>`);
+function loginBox(reason){overlay(`<div style="font-size:64px">🎮</div><h2>English Games</h2><p>${reason||'Inicia sessió per guardar els teus punts i sortir al rànquing!'}</p><button class="efgo g" id="efG">${G} Inicia sessió amb Google</button><button class="efsm" id="efNo">Ara no, només vull jugar</button>`);
  document.getElementById('efG').onclick=EF.login;document.getElementById('efNo').onclick=closeOv}
 EF.loginBox=loginBox;
 
