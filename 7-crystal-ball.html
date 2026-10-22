@@ -61,7 +61,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:60}
 <div class="stars"></div>
 <canvas id="fx"></canvas>
 <div class="wrap">
- <header><h1>🔮 Crystal Ball Future<small>Unit 5 · At the TV studio · will / won’t · jobs</small></h1>
+ <header><h1>🔮 Crystal Ball Future<small>Unit 5 · At the TV studio · will / will not · jobs</small></h1>
   <div class="mode" id="mode"><button data-v="mix" class="on">✨ Mix</button><button data-v="guess">👁️ Guess the job</button><button data-v="yn">❓ Will…? Yes/No</button><button data-v="build">🧩 Build the prediction</button></div>
  </header>
  <div class="hud"><div>Fortune <b id="rnd">0/10</b></div><div>Magic points <b id="pts">0</b></div><div>Streak <b id="stk">0</b> 🔥</div></div>
@@ -75,7 +75,7 @@ const IMG=["data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUEBAYFB
 const JOBS=[{j:'actor',a:'an',p:'he'},{j:'builder',a:'a',p:'she'},{j:'camera operator',a:'a',p:'he'},{j:'clothes designer',a:'a',p:'she'},{j:'comedian',a:'a',p:'he'},{j:'dancer',a:'a',p:'she'},{j:'director',a:'a',p:'she'},{j:'hairdresser',a:'a',p:'he'},{j:'writer',a:'a',p:'she'}];
 const NAMES={he:['Leo','Max','Pau','Omar','Marc','Nico'],she:['Emma','Lucía','Aina','Zoe','Mia','Laia']};
 const SUBJ=[['I','I'],['you','you'],['we','we'],['they','they']];
-const NEGACT=[['won’t','dance in the show'],['won’t','wear a uniform'],['won’t','be famous'],['won’t','live in Barcelona'],['will','travel around the world'],['will','be rich'],['will','work on TV'],['will','have three cats']];
+const NEGACT=[['will not','dance in the show'],['will not','wear a uniform'],['will not','be famous'],['will not','live in Barcelona'],['will','travel around the world'],['will','be rich'],['will','work on TV'],['will','have three cats']];
 const $=s=>document.querySelector(s);const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};const pick=a=>a[Math.random()*a.length|0];
 const cap=s=>s[0].toUpperCase()+s.slice(1);
 let mode='mix',rnd=0,pts=0,stk=0,timer=null,busy=false;
@@ -87,7 +87,7 @@ function setVis(i,blur,show=true){const v=$('#vis');v.src=IMG[i];v.style.filter=
 function hide(){$('#vis').style.opacity=0;$('#fog').style.opacity=1}
 function intro(){
  rnd=0;pts=0;stk=0;hud();hide();
- $('#panel').innerHTML=`<span class="tag">✨ Madame Fortuna</span><h2>Welcome, young friend! I can see the future… 🔮</h2><p>Touch the crystal ball to see what people <b>will</b> be in the future. Answer my questions with <b>will</b> and <b>won’t</b> to win magic points!</p><button class="btn" id="go">Look into the ball ✨</button>`;
+ $('#panel').innerHTML=`<span class="tag">✨ Madame Fortuna</span><h2>Welcome, young friend! I can see the future… 🔮</h2><p>Touch the crystal ball to see what people <b>will</b> be in the future. Answer my questions with <b>will</b> and <b>will not</b> to win magic points!</p><button class="btn" id="go">Look into the ball ✨</button>`;
  $('#go').onclick=nextRound;
 }
 function nextRound(){
@@ -120,8 +120,8 @@ function guess(k,J,name){
 function yn(k,J,name){
  setVis(k,0);const yes=Math.random()<.5,k2=yes?k:pick([0,1,2,3,4,5,6,7,8].filter(x=>x!==k)),J2=JOBS[k2];
  const pr=J.p,q=`Will ${name} be ${J2.a} ${J2.j}?`;
- const ans=yes?`Yes, ${pr} will.`:`No, ${pr} won’t.`;
- const opts=shuffle(yes?[ans,`Yes, ${pr} won’t.`,`No, ${pr} won’t.`,`Yes, ${pr} is.`]:[ans,`No, ${pr} will.`,`Yes, ${pr} will.`,`No, ${pr} doesn’t.`]);
+ const ans=yes?`Yes, ${pr} will.`:`No, ${pr} will not.`;
+ const opts=shuffle(yes?[ans,`Yes, ${pr} will not.`,`No, ${pr} will not.`,`Yes, ${pr} is.`]:[ans,`No, ${pr} will.`,`Yes, ${pr} will.`,`No, ${pr} does not.`]);
  $('#panel').innerHTML=`<span class="tag">❓ Will…? · look at the ball</span><h2>“${q}”</h2><p>Look carefully at ${name}’s future in the crystal ball.</p><div class="opts">${opts.map(o=>`<button class="opt">${o}</button>`).join('')}</div>`;
  say(q);
  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(busy)return;busy=true;const ok=b.textContent===ans;b.classList.add(ok?'ok':'no');if(!ok)[...document.querySelectorAll('.opt')].find(x=>x.textContent===ans).classList.add('ok');
@@ -133,7 +133,7 @@ function build(k,J,name){
  if(r<.4){words=[name,'will','be',J.a,...J.j.split(' ')];sent=words.join(' ')+'.'}
  else if(r<.7){const [m,act]=pick(NEGACT);words=[cap(J.p),m,...act.split(' ')];sent=words.join(' ')+'.'}
  else{words=['Will',name,'be',J.a,...J.j.split(' ')];sent=words.join(' ')+'?'}
- const distract=pick(r<.4||r>=.7?['is','won’t','be','going']:['will','is','does']);
+ const distract=pick(r<.4||r>=.7?['is','will not','be','going']:['will','is','does']);
  const pool=shuffle([...words.map((w,i)=>({w,i})),{w:distract,i:-1}]);let chosen=[];
  $('#panel').innerHTML=`<span class="tag">🧩 Build the prediction · ${name} ${J.p==='he'?'👦':'👧'}</span><h2>Put the words in order${sent.endsWith('?')?' to make a question':''}!</h2><p>${sent.endsWith('?')?'Ask Madame Fortuna about the picture. (One word is extra!)':'Make Madame Fortuna’s prediction. (One word is extra!)'}</p><div class="answer" id="ansb"></div><div class="pool" id="pool"></div><div class="tools"><button id="undo">↩️ Undo</button><button id="chk" style="border-color:var(--gold);color:var(--gold)">✔ Check</button></div>`;
  function draw(){$('#ansb').innerHTML=chosen.map(c=>`<button class="tile">${c.w}</button>`).join('')+`<span style="font-size:22px;color:var(--muted)">${sent.slice(-1)}</span>`;
@@ -148,7 +148,7 @@ function build(k,J,name){
 function finale(){hide();sWin();rain();
  const rank=pts>=1700?'🌟 Grand Wizard of the Future':pts>=1100?'🔮 Fortune Teller':'✨ Apprentice';
  const myjob=pick(JOBS);
- $('#panel').innerHTML=`<span class="tag">✨ The end</span><h2>${rank}</h2><p style="font-size:20px">Magic points: <b style="color:var(--gold)">${pts}</b></p><p style="margin-top:10px">Madame Fortuna says: “In the future, <b style="color:var(--ink)">you will be ${myjob.a} ${myjob.j}</b>… and you <b style="color:var(--ink)">won’t</b> forget your English!” 😉</p><button class="btn" id="re">Play again 🔮</button>`;
+ $('#panel').innerHTML=`<span class="tag">✨ The end</span><h2>${rank}</h2><p style="font-size:20px">Magic points: <b style="color:var(--gold)">${pts}</b></p><p style="margin-top:10px">Madame Fortuna says: “In the future, <b style="color:var(--ink)">you will be ${myjob.a} ${myjob.j}</b>… and you <b style="color:var(--ink)">will not</b> forget your English!” 😉</p><button class="btn" id="re">Play again 🔮</button>`;
  setTimeout(()=>setVis(JOBS.indexOf(myjob),0),600);$('#re').onclick=intro;say(`In the future, you will be ${myjob.a} ${myjob.j}!`)}
 $('#ball').onclick=()=>{if(!rnd&&$('#go'))nextRound()};
 document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mode button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.v;intro()});

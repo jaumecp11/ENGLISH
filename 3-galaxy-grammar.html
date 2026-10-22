@@ -65,11 +65,11 @@ const pick=a=>a[Math.random()*a.length|0];
 
 function makeQ(m){
  if(m===0){const [i,w]=pick(TECH);const wrong=shuffle([...TECH.filter(t=>t[1]!==w).map(t=>t[1]),...EXTRA]).slice(0,3);
-  return {img:i,lbl:'SCAN THE OBJECT',html:w==='headphones'?`What are these? They're <span class="blank">?</span>`:`What's this? It's a <span class="blank">?</span>`,ans:w,opts:shuffle([w,...wrong]),say:w==='headphones'?"They're headphones.":`It's a ${w}.`}}
+  return {img:i,lbl:'SCAN THE OBJECT',html:w==='headphones'?`What are these? They are <span class="blank">?</span>`:`What is this? It is a <span class="blank">?</span>`,ans:w,opts:shuffle([w,...wrong]),say:w==='headphones'?"They are headphones.":`It is a ${w}.`}}
  if(m===1){const p=pick(P),[i,obj]=pick(TECH),useAdj=Math.random()<.5;
   const ans=useAdj?p.adj:p.pr;const others=useAdj?[p.pr,p.ob]:[p.adj,p.ob];
   let opts=[...new Set([ans,...others])];while(opts.length<3){const x=pick(P);const c=pick([x.adj,x.pr]);if(!opts.includes(c)&&c!==ans)opts.push(c)}
-  const pl=obj==='headphones',its=pl?"They're":"It's",be=pl?'are':'is';
+  const pl=obj==='headphones',its=pl?"They are":"It is",be=pl?'are':'is';
   const html=useAdj?`${its} <span class="blank">?</span> ${obj}. <span class="hint">(${p.e} ${p.s})</span>`:`The ${obj} ${be} <span class="blank">?</span> <span class="hint">(${p.e} ${p.s})</span>`;
   const sent=useAdj?`${its} ${ans} ${obj}.`:`The ${obj} ${be} ${ans}.`;
   return {img:i,lbl:useAdj?'POSSESSIVE ADJECTIVE + NOUN':'POSSESSIVE PRONOUN (NO NOUN!)',html,ans,opts:shuffle(opts),say:sent}}

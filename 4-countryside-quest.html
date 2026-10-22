@@ -90,7 +90,7 @@ const PL=[{a:'historical',n:'the castle'},{a:'modern',n:'the city'},{a:'frighten
 const SHORT=[[4,3,'quiet','quieter','more quiet','quietter'],[3,4,'noisy','noisier','more noisy','noisyer'],[1,0,'big','bigger','more big','biger'],[0,1,'old','older','more old','oldder'],[5,4,'cold','colder','more cold','coldest'],[2,7,'dark','darker','more dark','darkest'],[5,7,'high','higher','more high','highest']];
 const SUP=[['It was ___ valley in the mountains.','beautiful','the most beautiful',['the more beautiful','the beautifulest']],
 ['He skied on ___ part of the mountain.','easy','the easiest',['the most easy','the easyest']],
-["He's ___ skier in the team.",'good','the best',['the goodest','the better']],
+["He is ___ skier in the team.",'good','the best',['the goodest','the better']],
 ["Holly is ___ character. 😌",'least nervous','the least nervous',['the less nervous','the leastest nervous']],
 ['This is ___ forest in the country. 👻','frightening','the most frightening',['the frighteningest','more frightening']],
 ['The fair was ___ place in town.','crowded','the most crowded',['the crowdedest','the more crowded']],
@@ -100,16 +100,16 @@ const SUP=[['It was ___ valley in the mountains.','beautiful','the most beautifu
 ['This is ___ shop in the city. 💎','expensive','the most expensive',['the expensivest','the more expensive']],
 ['The mountain is ___ place to ski. ⚠️','dangerous','the most dangerous',['the dangerousest','most dangerous than']],
 ['Our hotel was ___ in the town. 🏨','big','the biggest',['the bigest','the most big']]];
-const PEOPLE=[['🙅','Ben never shares his sweets with anyone. He’s ___.','selfish'],['🤗','Mia helps everybody and always says nice things. She’s ___.','kind'],['😎','Leo sings in front of the whole school with no problem. He’s ___.','confident'],['😳','Sara fell over in front of everyone and her face went red. She’s ___.','embarrassed'],['😰','Tom has an exam today and his hands are shaking. He’s ___.','nervous'],['🙈','Ana doesn’t like talking to new people. She’s ___.','shy'],['🎁','Max gave his last sandwich to a hungry friend. He’s ___.','kind'],['🎤','Zoe hides behind her mum when she meets new people. She’s ___.','shy']];
+const PEOPLE=[['🙅','Ben never shares his sweets with anyone. He is ___.','selfish'],['🤗','Mia helps everybody and always says nice things. She is ___.','kind'],['😎','Leo sings in front of the whole school with no problem. He is ___.','confident'],['😳','Sara fell over in front of everyone and her face went red. She is ___.','embarrassed'],['😰','Tom has an exam today and his hands are shaking. He is ___.','nervous'],['🙈','Ana does not like talking to new people. She is ___.','shy'],['🎁','Max gave his last sandwich to a hungry friend. He is ___.','kind'],['🎤','Zoe hides behind her mum when she meets new people. She is ___.','shy']];
 const PADJ=['selfish','kind','confident','embarrassed','nervous','shy'];
 const DIALOG=[['“How was your day out?” “It was ___! We had lots of fun.” 🎉','great',['boring','frightening']],
-['“How was your day out?” “It ___ very exciting. It was a bit boring.” 🥱',"wasn’t",['was','isn’t']],
+['“How was your day out?” “It ___ very exciting. It was a bit boring.” 🥱',"was not",['was','is not']],
 ['“How was the museum?” “It was ___ boring, but OK.”','a bit',['a lot','very much']],
-['“What’s the film at seven o’clock like?” “It’s an ___ film. There are pirates!” 🏴‍☠️','adventure',['horror','true story']],
-['“What’s the film at eight like?” “It’s a ___ film. There are ghosts and monsters!” 👻','horror',['adventure','comedy']],
-['“Excuse me, what’s the film at seven o’clock ___?”','like',['likes','love']],
+['“What is the film at seven o’clock like?” “It is an ___ film. There are pirates!” 🏴‍☠️','adventure',['horror','true story']],
+['“What is the film at eight like?” “It is a ___ film. There are ghosts and monsters!” 👻','horror',['adventure','comedy']],
+['“Excuse me, what is the film at seven o’clock ___?”','like',['likes','love']],
 ['“How was the ski trip?” “It was ___! I loved it!” ⛷️','amazing',['a bit boring','terrible']],
-['“How was your day out?” “It wasn’t very ___. It rained all day.” 🌧️','good',['bad','well']]];
+['“How was your day out?” “It was not very ___. It rained all day.” 🌧️','good',['bad','well']]];
 const SPECIAL={6:{ic:'🌉',l:'Shortcut! +3',mv:3},12:{ic:'🏔️',l:'Avalanche! −3',mv:-3},17:{ic:'🛶',l:'Boat ride! Roll again',again:1},22:{ic:'🌲',l:'Lost in the forest! −4',mv:-4},26:{ic:'🚠',l:'Cable car! +2',mv:2}};
 const TYPES=['place','compare','people','super','dialog','place','compare','super'];
 const N=30;const sq=[];let pi=0,ti=0;
@@ -160,7 +160,7 @@ async function land(from){
 }
 function makeQ(s){
  if(s.t==='place'){const P=PL[s.p];const o=shuffle(PL.filter(x=>x.a!==P.a)).slice(0,2).map(x=>x.a);
-  return {tag:['🖼️ Describe the place','var(--t-place)'],imgs:[[s.p,P.n]],q:`What’s ${P.n} like? It’s very <span class="bl"></span>.`,ans:P.a,opts:shuffle([P.a,...o]),say:`${P.n} is very ${P.a}.`}}
+  return {tag:['🖼️ Describe the place','var(--t-place)'],imgs:[[s.p,P.n]],q:`What is ${P.n} like? It is very <span class="bl"></span>.`,ans:P.a,opts:shuffle([P.a,...o]),say:`${P.n} is very ${P.a}.`}}
  if(s.t==='compare'){
   if(Math.random()<.5){const [a,b,base,c,w1,w2]=pick(SHORT);const A=PL[a].n,B=PL[b].n;const cap=A[0].toUpperCase()+A.slice(1);
    return {tag:['⚖️ Compare','var(--t-compare)'],imgs:[[a,A],[b,B]],q:`${cap} is <span class="bl"></span> ${B}. <small>(${base})</small>`,ans:`${c} than`,opts:shuffle([`${c} than`,`${w1} than`,`${w2} than`]),say:`${cap} is ${c} than ${B}.`}}

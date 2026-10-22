@@ -63,7 +63,7 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:60}
 <canvas id="fx"></canvas>
 <div class="wrap">
  <header>
-  <h1>🚉 Station <span>Escape</span><small>Unit 3 · At the train station · prepositions · must / mustn’t · need to</small></h1>
+  <h1>🚉 Station <span>Escape</span><small>Unit 3 · At the train station · prepositions · must / must not · need to</small></h1>
   <div class="timer" id="timerBox">⏱️ <span id="time">10:00</span><button id="tgl">Timer: ON</button></div>
  </header>
  <div class="game">
@@ -84,8 +84,8 @@ const FIND=[['Click on the animal that is <b>above</b> the clock.','bird','The b
 const WHERE=[['cat','The cat is ___ the bench.','below'],['bird','The bird is ___ the clock.','above'],['suitcase','The suitcase is ___ the ticket office.','in front of'],['umbrella','The umbrella is ___ the lift.','inside'],['dog','The dog is ___ the waiting room.','outside'],['train','The train is coming ___ the tunnel.','through'],['clock','The clock is ___ the bird.','below'],['board','The departures board is ___ the platform.','above']];
 const PREPS=['above','below','in front of','inside','outside','through'];
 const PLACES=['escalator','lift','stairs','office','board','waiting','platform','tunnel','bench'];
-const RULES=[['🏃‍♂️🚫','You ___ run on the escalator.','mustn’t',['must','need to']],['🎫','You ___ buy a ticket before you get on the train.','must',['mustn’t','don’t need to']],['🚭','You ___ smoke in the station.','mustn’t',['must','needs to']],['🟨','You ___ stand behind the yellow line.','must',['mustn’t','doesn’t need to']],['🛗🔧','The lift is broken. You ___ use the lift.','mustn’t',['must','need to']],['🤫','You ___ be quiet in the waiting room.','must',['mustn’t','don’t need to']],['⚽','You ___ play football on the platform.','mustn’t',['must','need to']],['🧳','You ___ leave your bags alone.','mustn’t',['must','needs to']],
-['✅🎫','I’ve got my ticket. I ___ buy a ticket.','don’t need to',['need to','doesn’t need to']],['❌🎫','Sara hasn’t got a ticket. She ___ buy one.','needs to',['need to','doesn’t need to']],['⏰','We’re late! We ___ run to the platform!','need to',['needs to','don’t need to']],['☀️','It’s sunny. You ___ take an umbrella.','don’t need to',['need to','doesn’t need to']],['☂️','Tom has got his umbrella. He ___ buy one.','doesn’t need to',['don’t need to','needs to']],['🎟️','Max wants a ticket. He ___ find the ticket office.','needs to',['need to','don’t need to']]];
+const RULES=[['🏃‍♂️🚫','You ___ run on the escalator.','must not',['must','need to']],['🎫','You ___ buy a ticket before you get on the train.','must',['must not','do not need to']],['🚭','You ___ smoke in the station.','must not',['must','needs to']],['🟨','You ___ stand behind the yellow line.','must',['must not','does not need to']],['🛗🔧','The lift is broken. You ___ use the lift.','must not',['must','need to']],['🤫','You ___ be quiet in the waiting room.','must',['must not','do not need to']],['⚽','You ___ play football on the platform.','must not',['must','need to']],['🧳','You ___ leave your bags alone.','must not',['must','needs to']],
+['✅🎫','I have got my ticket. I ___ buy a ticket.','do not need to',['need to','does not need to']],['❌🎫','Sara has not got a ticket. She ___ buy one.','needs to',['need to','does not need to']],['⏰','We are late! We ___ run to the platform!','need to',['needs to','do not need to']],['☀️','It is sunny. You ___ take an umbrella.','do not need to',['need to','does not need to']],['☂️','Tom has got his umbrella. He ___ buy one.','does not need to',['do not need to','needs to']],['🎟️','Max wants a ticket. He ___ find the ticket office.','needs to',['need to','do not need to']]];
 const LOCKS=[{n:'Find it',i:'🔍',k:'find',q:5},{n:'Where?',i:'📍',k:'where',q:5},{n:'Places',i:'🚉',k:'places',q:5},{n:'Rules',i:'⚠️',k:'rules',q:6}];
 const $=s=>document.querySelector(s);const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 let code,lockI,qI,qs,T=600,timerOn=true,tick,state,cur;
@@ -138,7 +138,7 @@ function keypad(){let typed='';
 function win(){state='win';clearInterval(tick);sWin();rain();const st=T>300?'⭐⭐⭐':T>120?'⭐⭐':'⭐';
  const tr=document.createElement('div');tr.className='trainrun';tr.textContent='🚆💨';$('#scene').appendChild(tr);
  $('#panel').innerHTML=`<span class="tag">🎉 You escaped!</span><h2>You caught the last train! 🚆</h2><p style="font-size:22px">${st}<br>Time left: <b style="color:var(--gold)">${fmt(T)}</b></p><button class="btn" id="re">Play again ↻</button>`;$('#re').onclick=intro;say('Well done! You caught the last train!')}
-function lose(){state='lose';clearInterval(tick);sBad();$('#scene').classList.add('dark');$('#panel').innerHTML=`<span class="tag">⏰ Time’s up!</span><h2>Oh no! The last train has left… 😢</h2><p>Try again — you can turn the timer off at the top.</p><button class="btn" id="re">Try again ↻</button>`;$('#re').onclick=intro}
+function lose(){state='lose';clearInterval(tick);sBad();$('#scene').classList.add('dark');$('#panel').innerHTML=`<span class="tag">⏰ Time is up!</span><h2>Oh no! The last train has left… 😢</h2><p>Try again — you can turn the timer off at the top.</p><button class="btn" id="re">Try again ↻</button>`;$('#re').onclick=intro}
 $('#scene').addEventListener('pointerdown',e=>{
  const r=$('#scene').getBoundingClientRect(),px=(e.clientX-r.left)/r.width*100,py=(e.clientY-r.top)/r.height*100;
  if(state!=='play'||!cur||cur.type!=='click'||cur.lock)return;
