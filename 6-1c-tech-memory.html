@@ -288,4 +288,14 @@ start();
 openIntro();
 </script>
 <script src="efauth.js"></script>
-<style>.efchip{font-size:15px!important;padding:6px 14px 6px 8px!important}.efchip .av{font-size:22px!important}</style></body></html>
+<style>.efchip{font-size:15px!important;padding:6px 14px 6px 8px!important}.efchip .av{font-size:22px!important}</style><style id="fitw">.word{overflow-wrap:normal!important;word-break:keep-all!important;hyphens:manual!important;overflow:hidden}</style>
+<script id="fitwjs">(function(){
+function fit(el){el.style.fontSize='';const base=parseFloat(getComputedStyle(el).fontSize)||20;let s=base;
+ const over=()=>el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1;
+ if(!el.clientWidth)return;while(over()&&s>9){s-=1;el.style.fontSize=s+'px'}}
+let q=false;function all(){q=false;document.querySelectorAll('.word').forEach(fit)}
+function sched(){if(!q){q=true;requestAnimationFrame(all)}}
+new MutationObserver(m=>{if(m.some(x=>x.type==='childList'))sched()}).observe(document.body,{childList:true,subtree:true});
+addEventListener('resize',sched);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(sched);sched();
+})();</script>
+</body></html>

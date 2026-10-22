@@ -197,3 +197,14 @@ build();
 <a href="index.html" style="position:fixed;right:12px;bottom:12px;z-index:9999;background:#fff;color:#26214a;font:700 15px Fredoka,system-ui,sans-serif;padding:8px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 0 rgba(0,0,0,.25)">🏠 Menu</a>
 <script src="efauth.js"></script>
 <style>.efchip{left:14px;right:auto}</style>
+<style id="fitw">.word{overflow-wrap:normal!important;word-break:keep-all!important;hyphens:manual!important;overflow:hidden}</style>
+<script id="fitwjs">(function(){
+function fit(el){el.style.fontSize='';const base=parseFloat(getComputedStyle(el).fontSize)||20;let s=base;
+ const over=()=>el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1;
+ if(!el.clientWidth)return;while(over()&&s>9){s-=1;el.style.fontSize=s+'px'}}
+let q=false;function all(){q=false;document.querySelectorAll('.word').forEach(fit)}
+function sched(){if(!q){q=true;requestAnimationFrame(all)}}
+new MutationObserver(m=>{if(m.some(x=>x.type==='childList'))sched()}).observe(document.body,{childList:true,subtree:true});
+addEventListener('resize',sched);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(sched);sched();
+})();</script>
+
