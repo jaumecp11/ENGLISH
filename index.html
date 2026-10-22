@@ -26,10 +26,17 @@ a{color:inherit}
 .hero{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px;margin-top:28px}
 .hi{color:#fff;font-size:19px;font-weight:600;opacity:.95}
 .hero h1{color:#fff;font-size:clamp(30px,5vw,44px);line-height:1.1;margin-top:4px;text-shadow:0 3px 0 rgba(0,0,0,.15)}
-.courses{display:flex;gap:6px;flex-wrap:wrap;background:rgba(0,0,0,.16);padding:6px;border-radius:22px}
-.courses button{border:0;cursor:pointer;font-weight:700;font-size:22px;padding:9px 24px;min-height:48px;border-radius:17px;background:transparent;color:#fff;transition:.15s}
-.courses button:hover{background:rgba(255,255,255,.15)}
-.courses button.on{background:#fff;color:var(--acc);box-shadow:0 5px 0 rgba(0,0,0,.2)}
+.cpick{width:100%}
+.cbadge{display:inline-block;vertical-align:middle;background:#fff;border-radius:14px;padding:2px 14px;font-size:.6em;box-shadow:0 4px 0 rgba(0,0,0,.18);text-shadow:none;margin-left:6px}
+.clab{color:#fff;font-size:18px;font-weight:700;margin-bottom:10px;opacity:.95}
+.courses{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.courses button{position:relative;border:4px solid transparent;cursor:pointer;background:#fff;color:var(--c);border-radius:24px;padding:12px 8px;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 7px 0 rgba(0,0,0,.2);transition:transform .15s,box-shadow .15s}
+.courses button b{font-size:40px;line-height:1;font-weight:700}
+.courses button small{font-size:15px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.courses button:hover{transform:translateY(-4px);box-shadow:0 11px 0 rgba(0,0,0,.2)}
+.courses button.on{background:var(--g);color:#fff;border-color:#fff;transform:translateY(-4px);box-shadow:0 11px 0 rgba(0,0,0,.25)}
+.courses button.on small{color:rgba(255,255,255,.9)}
+.courses button.on::after{content:'✓';position:absolute;top:-12px;right:-12px;width:32px;height:32px;border-radius:50%;background:#ffcf3f;color:#3a2a00;font-size:19px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 rgba(0,0,0,.2)}
 /* home tiles */
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-top:30px}
 .tile{text-align:left;border:0;cursor:pointer;background:#fff;border-radius:32px;padding:28px;box-shadow:0 10px 0 rgba(0,0,0,.18);display:flex;flex-direction:column;gap:14px;color:var(--ink);transition:transform .15s,box-shadow .15s}
@@ -127,7 +134,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .tex button:hover{background:#ece8fb}
 .tex small{display:block;font-size:13px;color:var(--mut);font-weight:500}
 @media (max-width:600px){.tc table{font-size:14px}.tc td{padding:6px}}
-@media (max-width:600px){.logo{font-size:26px}.tile{padding:22px}.tile h2{font-size:32px}.courses button{padding:8px 18px;font-size:20px}}
+@media (max-width:600px){.logo{font-size:26px}.tile{padding:22px}.tile h2{font-size:32px}.courses{gap:10px}.courses button{min-height:76px;border-radius:20px}.courses button b{font-size:32px}.courses button small{font-size:12px}}
 </style></head><body>
 <div class="wrap">
  <header class="hdr">
@@ -136,7 +143,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}
  </header>
  <div class="hero">
   <div><p class="hi" id="hi">Hola! 👋</p><h1 id="ttl">Què vols practicar avui?</h1></div>
-  <nav class="courses" id="tabs" aria-label="Curs"></nav>
+  <div class="cpick"><p class="clab">👇 Tria el teu curs</p><nav class="courses" id="tabs" aria-label="Curs"></nav></div>
  </div>
  <section id="vHome">
   <div class="tiles">
@@ -199,7 +206,7 @@ const THEORY={
 const TYPES={ws:['Word Search','#e7f5ff','#1864ab'],train:['Sentence Train','#fff4e6','#b3400a'],mem:['Memory','#fff0f6','#a61e4d'],board:['Board game','#ebfbee','#237032'],arcade:['Arcade','#f3f0ff','#5f3dc4'],mystery:['Mystery picture','#e6fcf5','#066649'],quiz:['Quiz & cards','#fff9db','#8a5a00'],gym:['Grammar Gym','#f8f0fc','#862e9c']};
 const C={
 '3r':{bg:'linear-gradient(135deg,#b8360b,#e8590c)',acc:'#c2410c',u:[
- {b:'★',t:'Starter',s:'All about me',v:[['🎡','All About Me Wheel','Spin the wheel: adjectives, questions, numbers','quiz','3-0-all-about-me-wheel.html']],g:[]},
+ {b:'★',t:'Starter',s:'All about me',v:[['🎈','Balloon Pop','Pop the right balloon: adjectives, questions, numbers','arcade','3-0-balloon-pop.html']],g:[]},
  {b:'1',t:'Unit 1',s:'I like animals',v:[['🔎','Animal Word Search','Find the animals in danger','ws','3-1a-animal-word-search.html'],['🃏','Animal Memory','Find the pairs: picture + word','mem','3-1c-animal-memory.html'],['🔨','Whack-an-Animal','Hit the right mole!','arcade','3-1d-whack-an-animal.html']],
   g:[['🚂','Animal Sentence Train','Put the words in order','train','3-1b-animal-sentence-train.html'],['be','Verb to be','am · is · are','gym','3-1e-grammar-gym.html#be'],['got','Have got','have got · has got','gym','3-1e-grammar-gym.html#have'],['-s','Present simple','They swim · They do not fly','gym','3-1e-grammar-gym.html#ps']]},
  {b:'2',t:'Unit 2',s:'My school day',v:[['🔎','School Word Search','Find the school subjects','ws','3-2a-school-word-search.html'],['🖼️','Mystery Subject','Guess the hidden picture','mystery','3-2d-mystery-subject.html'],['🎲','My School Day Board Game','Dice game for teams','board','3-2c-school-day-board-game.html']],
@@ -237,7 +244,7 @@ function games(list){return list.map(t=>({e:t[0],n:t[1],d:t[2],ty:t[3],h:t[4],gl
 function units(){return C[course].u.map((u,k)=>({...u,k,V:games(u.v),G:games(u.g)}))}
 function prog(list){const p=list.filter(g=>g.bs!=null).length;return{p,n:list.length,pct:list.length?Math.round(p/list.length*100):0,st:list.reduce((a,g)=>a+(g.bs||0),0)}}
 function badge(g){if(g.bs!=null)return `<span class="st" aria-label="${g.bs} de 3 estrelles">${'★'.repeat(g.bs)}${'☆'.repeat(3-g.bs)}</span>`;return logged()?'<span class="new">NOU</span>':''}
-const GICON={'3-0-all-about-me-wheel.html':'g_wheel','3-1a-animal-word-search.html':'g_aws','3-1c-animal-memory.html':'g_amem','3-1d-whack-an-animal.html':'g_whack','3-1b-animal-sentence-train.html':'g_atrain','3-2a-school-word-search.html':'g_sws','3-2d-mystery-subject.html':'g_msub','3-2c-school-day-board-game.html':'g_sboard','3-2b-school-sentence-train.html':'g_strain','6-0a-compare-it.html':'cmp'};
+const GICON={'3-1a-animal-word-search.html':'g_aws','3-1c-animal-memory.html':'g_amem','3-1d-whack-an-animal.html':'g_whack','3-1b-animal-sentence-train.html':'g_atrain','3-2a-school-word-search.html':'g_sws','3-2d-mystery-subject.html':'g_msub','3-2c-school-day-board-game.html':'g_sboard','3-2b-school-sentence-train.html':'g_strain','6-0a-compare-it.html':'cmp'};
 function icon(g){const I=window.ICONS||{},k=GICON[g.h]||(g.gl?null:g.ty);if(k&&I[k])return `<span class="ic im"><img src="${I[k]}" alt=""></span>`;const t=TYPES[g.ty];return `<span class="ic${g.gl?' g'+(g.e.length>3?' l':''):''}" style="background:${t[1]};color:${t[2]}">${esc(g.e)}</span>`}
 function tag(g){const t=TYPES[g.ty];return `<span class="tag" style="background:${t[1]};color:${t[2]}">${t[0]}</span>`}
 function card(g){return `<a class="card" href="${g.h}"><span class="ctop">${icon(g)}${badge(g)}</span><b>${esc(g.n)}</b><small>${esc(g.d)}</small>${tag(g)}</a>`}
@@ -245,7 +252,7 @@ function row(g){return `<a class="row" href="${g.h}">${icon(g)}<span class="rt">
 function uhead(u,list){const p=prog(list);return `<div class="uh"><span class="ub">${u.b}</span><span class="ut"><h2>${u.t}</h2><span>${esc(u.s)}</span></span>${logged()?`<span class="up"><b><i style="width:${p.pct}%"></i></b>${p.p}/${p.n} jugats</span>`:''}</div>`}
 function render(){
  const D=C[course];document.body.style.setProperty('--bg',D.bg);document.documentElement.style.background=D.acc;document.body.style.setProperty('--acc',D.acc);
- $('#tabs').innerHTML=Object.keys(C).map(c=>`<button data-c="${c}" class="${c===course?'on':''}" aria-pressed="${c===course}">${c}</button>`).join('');
+ $('#tabs').innerHTML=Object.keys(C).map(c=>`<button data-c="${c}" class="${c===course?'on':''}" aria-pressed="${c===course}" style="--c:${C[c].acc};--g:${C[c].bg}"><b>${c}</b><small>curs</small></button>`).join('');
  const U=units(),allV=U.flatMap(u=>u.V),allG=U.flatMap(u=>u.G);
  const L=logged();$$('.lg').forEach(e=>e.classList.toggle('hide',!L));
  const st={v:{...prog(allV),count:allV.length,units:U.filter(u=>u.V.length).length},g:{...prog(allG),count:allG.length,units:U.filter(u=>u.G.length).length}};
@@ -256,6 +263,8 @@ function render(){
  $('#stN').textContent=st.v.st+st.g.st;$('#stp').classList.toggle('on',L);
  const nm=window.EF&&EF.profile&&EF.profile.nickname;$('#hi').textContent='Hola'+(nm?', '+nm.split(' ')[0]:'')+'! 👋';
  $('#ttl').textContent={home:'Què vols practicar avui?',vocab:'📖 Vocabulary',grammar:'✏️ Grammar',all:'🧩 Tots els jocs'}[view];
+ $('.cpick').classList.toggle('hide',view!=='home');
+ if(view!=='home')$('#ttl').innerHTML+=` <span class="cbadge" style="color:${D.acc}">${course}</span>`;
  $('#vHome').classList.toggle('hide',view!=='home');$('#vSub').classList.toggle('hide',view==='home');
  if(view==='home')return;
  $$('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.go===view));$('#thBtn').classList.toggle('hide',view==='vocab');
