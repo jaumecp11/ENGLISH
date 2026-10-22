@@ -236,6 +236,7 @@ const C={
 };
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const ss={get:k=>{try{return sessionStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{sessionStorage.setItem(k,v)}catch(e){}}};
 const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
 let course='3r',view='home';
 const logged=()=>!!(window.EF&&EF.user);
@@ -288,11 +289,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#tov').classList.
 function paintIcons(){const I=window.ICONS||{};$$('[data-ico]').forEach(e=>{const s=I[e.dataset.ico];if(s&&!e.querySelector('img'))e.innerHTML=`<img src="${s}" alt="">`})}
 paintIcons();
 function setCourse(c){course=c;ls.set('course',c);history.replaceState(null,'','#'+encodeURIComponent(c));render()}
-function go(v){view=v;ls.set('view',v);render();window.scrollTo({top:0,behavior:'smooth'})}
+function go(v){view=v;ss.set('view',v);render();window.scrollTo({top:0,behavior:'smooth'})}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-go]');if(t){go(t.dataset.go);return}const c=e.target.closest('#tabs button');if(c)setCourse(c.dataset.c)});
 $('#logo').onclick=()=>go('home');
 let explicit=false;
-(function init(){let c=decodeURIComponent(location.hash.slice(1));if(!C[c])c=ls.get('course');if(C[c]){course=c;explicit=true}const v=ls.get('view');if(['home','vocab','grammar','all'].includes(v))view=v;render()})();
+(function init(){let c=decodeURIComponent(location.hash.slice(1));if(!C[c])c=ls.get('course');if(C[c]){course=c;explicit=true}const v=ss.get('view');if(['home','vocab','grammar','all'].includes(v))view=v;render()})();
 </script>
 <script src="efauth.js"></script>
 <script>
